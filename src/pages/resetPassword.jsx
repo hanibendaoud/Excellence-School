@@ -18,22 +18,79 @@ export default function ResetPassword() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+const handleEmailSubmit = async (e)=>{
+  e.preventDefault();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (step === 1) {
-      setStep(2);
-    } else if (step === 2) {
-      setStep(3);
-    } else if (step === 3) {
-      if (formData.newPassword !== formData.confirmPassword) {
-        alert("Passwords do not match!");
-        return;
+  try{
+    const response = await fetch("https://excellenceschool.onrender.com/Reset_your_password",
+      {
+        method : "POST",
+        headers :  {"Content-Type" : "application/json"},
+        body : JSON.stringify({email : formData.email})
       }
-      console.log("Password reset:", formData);
-      navigate("/login");
+    )
+    if (!response.ok){
+      throw new Error(`Server error ${response.status}`)
     }
-  };
+    const data = response.json();
+    console.log(data)
+    setStep(2)
+  }catch(err){
+    console.log(err)
+  }
+}
+const handleCodeSubmit = async (e)=>{
+
+  e.preventDefault();
+  const payload = {email: formData.email, verificationCode: formData.code.toString()};
+console.log('Sending payload:', payload);
+console.log('Email type:', typeof formData.email);
+console.log('Code type:', typeof formData.code);
+console.log('Code value:', formData.code);
+  console.log({email: formData.email , verificationCode :formData.code})
+  try{
+    const response = await fetch("https://excellenceschool.onrender.com/Reset_your_password2",{
+      method : "POST",
+      headers :  {"Content-Type":"application/json"},
+      body : JSON.stringify({email: formData.email , verificationCode : formData.code})
+    })
+    if (!response.ok){
+      throw new Error(`Serve error ${response.status}`)
+    }
+    
+    const data = await response.json()
+    console.log(data)
+    setStep(3)
+  }catch(err){
+    console.log(err)
+  }
+}
+const handlePasswordSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const payload = { email: formData.email, password: formData.newPassword };
+    console.log("Submitting payload:", payload);
+
+    const response = await fetch('https://excellenceschool.onrender.com/Reset_your_password3', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text(); // capture backend error
+      throw new Error(`Server error ${response.status}: ${errorText}`);
+    }
+
+    const data = await response.json();
+    console.log("Server response:", data);
+
+    navigate('/login');
+  } catch (err) {
+    console.error("Password reset failed:", err);
+  }
+};
+
 
   return (
     <div className="h-screen flex items-center justify-center p-6 relative overflow-hidden">
@@ -65,12 +122,13 @@ export default function ResetPassword() {
                 Enter your email to receive a verification code and reset your
                 password.
               </p>
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleEmailSubmit} className="space-y-4">
                 <div className="relative">
                   <FaEnvelope className="absolute right-3 top-4 text-gray-400" />
                   <input
                     type="email"
                     name="email"
+                    autoComplete="off"
                     placeholder="Email Address"
                     value={formData.email}
                     onChange={handleChange}
@@ -107,46 +165,66 @@ export default function ResetPassword() {
                 Enter the confirmation code you received in{" "}
                 <span className="font-medium">{formData.email}</span>
               </p>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-6 gap-2">
-                  {[...Array(6)].map((_, i) => (
-                    <input
-                      key={i}
-                      type="text"
-                      maxLength={1}
-                      className="border p-3 text-center rounded-md"
-                      onChange={(e) => {
-                        const newCode = formData.code.split("");
-                        newCode[i] = e.target.value;
-                        setFormData({ ...formData, code: newCode.join("") });
-                      }}
-                    />
-                  ))}
-                </div>
+              <form onSubmit={handleCodeSubmit} className="space-y-4">
+      {/* OTP Inputs */}
+      <div className="flex justify-center gap-2">
+        {[...Array(6)].map((_, i) => (
+          <input
+            key={i}
+            type="text"
+            maxLength={1}
+            value={formData.code[i] || ""}
+            className="w-12 h-12 border rounded-md text-center text-lg focus:outline-none focus:ring-2 focus:ring-orange-400"
+            onChange={(e) => {
+              const value = e.target.value.replace(/[^0-9]/g, "");
+              if (!value && i > 0) {
+                e.target.previousSibling?.focus();
+              }
+              const newCode = formData.code.split("");
+              newCode[i] = value;
+              setFormData({ ...formData, code: newCode.join("") });
+              if (value && i < 5) {
+                e.target.nextSibling?.focus();
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Backspace" && !formData.code[i] && i > 0) {
+                e.preventDefault();
+                e.target.previousSibling?.focus();
+              }
+            }}
+          />
+        ))}
+      </div>
 
-                <p className="text-sm text-gray-500">
-                  Didn’t get the code?{" "}
-                  <span className="text-orange-500 cursor-pointer">
-                    Resend new code
-                  </span>
-                </p>
+      {/* Resend link */}
+      <p className="text-sm text-gray-500">
+        Didn’t get the code?{" "}
+        <span
+          className="text-orange-500 cursor-pointer hover:underline"
+          onClick={() => console.log("Resend new code")}
+        >
+          Resend new code
+        </span>
+      </p>
 
-                <div className="flex gap-4">
-                  <button
-                    type="button"
-                    onClick={() => setStep(1)}
-                    className="w-1/2 border py-3 rounded-md font-medium hover:bg-gray-100 transition"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="w-1/2 bg-gradient-to-r from-orange-400 to-orange-500 py-3 rounded-md text-white font-medium hover:opacity-90 transition"
-                  >
-                    Next
-                  </button>
-                </div>
-              </form>
+      {/* Buttons */}
+      <div className="flex gap-4">
+        <button
+          type="button"
+          onClick={() => setStep(1)}
+          className="w-1/2 border py-3 rounded-md font-medium hover:bg-gray-100 transition"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          className="w-1/2 bg-gradient-to-r from-orange-400 to-orange-500 py-3 rounded-md text-white font-medium hover:opacity-90 transition"
+        >
+          Next
+        </button>
+      </div>
+    </form>
             </>
           )}
 
@@ -155,7 +233,7 @@ export default function ResetPassword() {
               <h2 className="text-xl font-semibold text-[#FF5722] mb-6">
                 Set a new password
               </h2>
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handlePasswordSubmit} className="space-y-4">
                 <div className="relative">
                   <FaLock className="absolute right-3 top-4 text-gray-400" />
                   <input

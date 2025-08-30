@@ -11,12 +11,22 @@ import  activity2  from "../assets/takreem.jpg"
 import  activity3  from "../assets/sorties.jpg"
 import  activity4  from "../assets/workshops.jpg"
 import { useNavigate } from "react-router-dom"
-
+import { useEffect } from "react";
 function Home() {
   const navigate = useNavigate();
   function clickHandle(){
     navigate('/register')
   }
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    const role = localStorage.getItem("role");
+
+    if (token) {
+      if (role === "student") navigate("/student/home", { replace: true });
+      else if (role === "admin") navigate("/admin/home", { replace: true });
+      else navigate("/unauthorized", { replace: true });
+    }
+  }, [navigate]);
   return(
     <div className="flex flex-col relative min-h-screen">
 

@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState  } from "react";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import wave from "../assets/wave.svg"; 
 import logo from "../assets/logo.svg"; 
-
+import useAuth from "../hooks/useAuth";
 const Login = () => {
   const navigate = useNavigate();
-
+  const {auth,login,setLoading,loading} = useAuth()
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -16,12 +16,44 @@ const Login = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Login Data:", formData);
-    // TODO: call API or auth logic here
-  };
+    const body = {
+      email: formData.email,
+      password: formData.password,
+    }
+    setLoading(true)
+    try {
+  const response = await fetch("https://excellenceschool.onrender.com/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
 
+  const data = await response.json(); 
+  if (!response.ok) {
+    throw new Error(data.message || `Server error ${response.status}`);
+  }
+  console.log("Login success:", data);
+  login({
+  accessToken: data.token,                 
+  email: data.user.email,                  
+  role: data.msg,                         
+  user : data.user           
+});
+
+  navigate("/student/home");
+} catch (err) {
+  console.error("Login failed:", err.message);
+}finally{
+  setLoading(false)
+}
+
+  };
+useEffect(()=>{
+  console.log(auth)
+},[auth])
   return (
     <div className="h-screen flex items-center justify-center p-6 relative overflow-hidden">
       <img 
@@ -46,7 +78,6 @@ const Login = () => {
 
           <p className="text-2xl font-bold">Excellence School</p>
           <p className="text-gray-600 mb-6 text-lg">مدرسة التميز الخاصة</p>
-
           <h2 className="text-3xl text-orange-500 font-bold mb-4">
             Welcome Back!
           </h2>
@@ -71,6 +102,8 @@ const Login = () => {
                 type="email"
                 name="email"
                 placeholder="Email Address"
+                autoComplete="off"
+                required
                 value={formData.email}
                 onChange={handleChange}
                 className="w-full border p-3 rounded-md pr-10"
@@ -83,6 +116,8 @@ const Login = () => {
               <input
                 type="password"
                 name="password"
+                autoComplete="off"
+                required
                 placeholder="Password"
                 value={formData.password}
                 onChange={handleChange}
@@ -105,11 +140,39 @@ const Login = () => {
                 Cancel
               </button>
               <button
-                type="submit"
-                className="w-1/2 bg-gradient-to-r from-orange-400 to-orange-500 py-3 rounded-md text-white font-medium hover:opacity-90 transition"
-              >
-                Log in
-              </button>
+  type="submit"
+  disabled={loading}
+  className={`w-1/2 flex items-center justify-center bg-gradient-to-r from-orange-400 to-orange-500 py-3 rounded-md text-white font-medium transition
+    ${loading ? "opacity-70 cursor-not-allowed" : "hover:opacity-90"}`}
+>
+  {loading ? (
+    <div className="flex items-center gap-2">
+      <svg
+        className="w-5 h-5 animate-spin text-white"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          className="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          strokeWidth="4"
+        ></circle>
+        <path
+          className="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+        ></path>
+      </svg>
+      <span>Loading...</span>
+    </div>
+  ) : (
+    "Log in"
+  )}
+</button>
             </div>
           </form>
 
