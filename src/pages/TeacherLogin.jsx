@@ -1,18 +1,22 @@
-import { useEffect, useState  } from "react";
+import { useEffect, useState } from "react";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import wave from "../assets/wave.svg"; 
-import logo from "../assets/logo.svg"; 
+import wave from "../assets/wave.svg";
+import logo from "../assets/logo.svg";
 import useAuth from "../hooks/useAuth";
 
-const Login = () => {
+const TeacherLogin = () => {
   const navigate = useNavigate();
-  const {auth, login, setLoading, loading} = useAuth();
+  const { auth, login, setLoading, loading } = useAuth();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
   const [error, setError] = useState("");
+
+  // Admin credentials
+  const ADMIN_EMAIL = "beddani@gmail.com";
+  const ADMIN_PASSWORD = "beddani2025";
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -21,63 +25,69 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login Data:", formData);
-    
-    const body = {
-      email: formData.email,
-      password: formData.password,
-    };
-    
+    console.log("Teacher/Admin Login Data:", formData);
+
     setLoading(true);
     setError("");
-    
+
     try {
-      const response = await fetch("https://excellenceschool.onrender.com/login", {
+      // Check if it's the admin account
+      if (formData.email === ADMIN_EMAIL && formData.password === ADMIN_PASSWORD) {
+        console.log("Admin login detected");
+        
+        // Login as admin
+        login({
+          accessToken: "admin-token-" + Date.now(), // Generate a simple token
+          email: ADMIN_EMAIL,
+          role: "admin",
+          id: "admin-001",
+          fullname: "Administrator",
+          mdp: formData.password,
+        });
+
+        navigate("/admin");
+        return;
+      }
+
+      // Otherwise, proceed with normal teacher login API call
+      const body = {
+        email: formData.email,
+        password: formData.password,
+      };
+
+      const response = await fetch("https://excellenceschool.onrender.com/loginteacher", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
       });
 
-      const data = await response.json(); 
-      
+      const data = await response.json();
+
       if (!response.ok) {
         throw new Error(data.message || `Server error ${response.status}`);
       }
-      
-      console.log("Login success:", data);
-      
-      const teacher = data.user.subjects && data.user.subjects.length > 0 
-        ? data.user.subjects[0].teacher 
-        : null;
 
+      console.log("Teacher Login success:", data);
+
+      // Login as teacher
       login({
-        accessToken: data.token,                 
-        email: data.user.email,                  
-        role: data.msg,                         
-        level: data.user.academiclevel || data.user.subjects[0]?.academiclevel,
-        teacher: teacher,
-        id: data.user._id,
-        accepter: data.accepeter || data.user.accepeter,
-        mdp:formData.password
+        accessToken: data.token,
+        email: data.email || formData.email,
+        role: data.msg, // Should be "teacher" from API
+        id: data.user?._id || null,
+        fullname: data.fullname,
+        mdp: formData.password,
       });
 
-      if (data.msg === "student") {
-        // Check if student is accepted
-        const isAccepted = data.accepeter || data.user.accepeter;
-        if (isAccepted) {
-          navigate("/student/home");
-        } else {
-          navigate("/student/waiting");
-        }
-      } else if (data.msg === "teacher") {
-        navigate("/teacher/home");
+      // Navigate based on role
+      if (data.msg === "teacher") {
+        navigate("/teacher");
       } else {
-        navigate("/"); 
+        navigate("/");
       }
-      
     } catch (err) {
       console.error("Login failed:", err.message);
-      setError(err.message || "Login failed. Please try again.");
+      setError(err.message || "Login failed. Please check your credentials.");
     } finally {
       setLoading(false);
     }
@@ -89,41 +99,35 @@ const Login = () => {
 
   return (
     <div className="h-screen flex items-center justify-center p-6 relative overflow-hidden">
-      <img 
-        src={wave} 
-        alt="wave background" 
+      {/* Background waves */}
+      <img
+        src={wave}
+        alt="wave background"
         className="absolute top-0 right-0 w-[28rem] md:w-[36rem] pointer-events-none select-none z-0"
       />
-      <img 
-        src={wave} 
-        alt="wave background" 
+      <img
+        src={wave}
+        alt="wave background"
         className="absolute bottom-0 left-0 w-[28rem] md:w-[36rem] rotate-180 pointer-events-none select-none z-0"
       />
 
       <div className="relative z-10 flex flex-col md:flex-row items-center justify-between w-full max-w-6xl gap-8">
-        
+        {/* Left side */}
         <div className="md:w-1/2 flex flex-col items-center justify-center text-center p-6 font-['Inria_Serif']">
-          <img 
-            src={logo} 
-            alt="Excellence School logo" 
-            className="w-[30%] mb-4"
-          />
-
+          <img src={logo} alt="Excellence School logo" className="w-[30%] mb-4" />
           <p className="text-2xl font-bold">Excellence School</p>
           <p className="text-gray-600 mb-6 text-lg">مدرسة التميز الخاصة</p>
-          <h2 className="text-3xl text-orange-500 font-bold mb-4">
-            Welcome Back!
-          </h2>
-
+          <h2 className="text-3xl text-blue-500 font-bold mb-4">Welcome Teachers & Admin!</h2>
           <p className="text-gray-600 max-w-md">
-            Log in to access your account, explore lessons, and stay updated 
-            with the latest school news.
+            Log in to access your teaching tools, manage lessons, and stay connected
+            with students and parents. Administrators can access the full management system.
           </p>
         </div>
 
+        {/* Right side */}
         <div className="md:w-1/2 p-6">
-          <h2 className="text-xl font-semibold text-[#FF5722] mb-6">
-            Log in to your account
+          <h2 className="text-xl font-semibold text-[#2196F3] mb-6">
+            Teacher/Admin Login
           </h2>
 
           {error && (
@@ -133,7 +137,6 @@ const Login = () => {
           )}
 
           <form className="space-y-4" onSubmit={handleSubmit}>
-            
             {/* Email */}
             <div className="relative">
               <FaEnvelope className="absolute right-3 top-4 text-gray-400" />
@@ -145,7 +148,7 @@ const Login = () => {
                 required
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full border p-3 rounded-md pr-10 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full border p-3 rounded-md pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
@@ -160,12 +163,14 @@ const Login = () => {
                 placeholder="Password"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full border p-3 rounded-md pr-10 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full border p-3 rounded-md pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
-            <p className="text-right text-sm text-gray-500 cursor-pointer hover:underline" 
-              onClick={() => navigate('/resetPassword')}>
+            <p
+              className="text-right text-sm text-gray-500 cursor-pointer hover:underline"
+              onClick={() => navigate("/resetPassword")}
+            >
               Forgot password?
             </p>
 
@@ -181,7 +186,7 @@ const Login = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className={`w-1/2 flex items-center justify-center bg-gradient-to-r from-orange-400 to-orange-500 py-3 rounded-md text-white font-medium transition
+                className={`w-1/2 flex items-center justify-center bg-gradient-to-r from-blue-400 to-blue-500 py-3 rounded-md text-white font-medium transition
                   ${loading ? "opacity-70 cursor-not-allowed" : "hover:opacity-90"}`}
               >
                 {loading ? (
@@ -215,28 +220,20 @@ const Login = () => {
             </div>
           </form>
 
+          {/* Back to student login link */}
           <p className="text-center text-sm text-gray-500 mt-4">
-            Don't have an account?{" "}
+            Not a teacher or admin?{" "}
             <span
-              className="text-orange-500 cursor-pointer hover:underline"
-              onClick={() => navigate("/signUp")}
+              className="text-blue-500 cursor-pointer hover:underline"
+              onClick={() => navigate("/login")}
             >
-              Sign up
+              Student login here
             </span>
           </p>
-          <p className="text-center text-sm text-gray-500 mt-2">
-  Are you a teacher or admin?{" "}
-  <span
-    className="text-blue-500 cursor-pointer hover:underline"
-    onClick={() => navigate("/teacherLogin")}
-  >
-    Log in here
-  </span>
-</p>
         </div>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default TeacherLogin;

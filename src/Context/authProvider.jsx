@@ -7,7 +7,20 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem("accessToken");
     const email = localStorage.getItem("email");
     const role = localStorage.getItem("role");
-    return token ? { accessToken: token, email, role } : {};
+    const level = localStorage.getItem("level");
+    const teacher = localStorage.getItem("teacher");
+    const id = localStorage.getItem("id");
+    const accepter = localStorage.getItem("accepter");
+    
+    return token ? { 
+      accessToken: token, 
+      email, 
+      role, 
+      level, 
+      teacher,
+      id,
+      accepter: accepter === "true" // Convert string to boolean
+    } : {};
   });
 
   const [loading, setLoading] = useState(false);
@@ -17,10 +30,19 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("accessToken", auth.accessToken);
       if (auth.email) localStorage.setItem("email", auth.email);
       if (auth.role) localStorage.setItem("role", auth.role);
+      if (auth.level) localStorage.setItem("level", auth.level);
+      if (auth.teacher) localStorage.setItem("teacher", auth.teacher);
+      if (auth.id) localStorage.setItem("id", auth.id);
+      if (auth.fullname) localStorage.setItem("fullname", auth.fullname);
+      localStorage.setItem("accepter", String(auth.accepter)); // Store as string
     } else {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("email");
       localStorage.removeItem("role");
+      localStorage.removeItem("level");
+      localStorage.removeItem("teacher");
+      localStorage.removeItem("id");
+      localStorage.removeItem("accepter");
     }
   }, [auth]);
 
@@ -29,9 +51,12 @@ export const AuthProvider = ({ children }) => {
       accessToken: data.accessToken,
       email: data.email,
       role: data.role,
-      level : data.user.academiclevel,
-      teacher: data.user.subjects?.[0]?.teacherId || null,
-      id:data.user.subjects._id
+      level: data.level,
+      teacher: data.teacher,
+      id: data.id,
+      accepter: Boolean(data.accepter),
+      mdp : data.mdp,
+      fullname:data.fullname
     });
   };
 
