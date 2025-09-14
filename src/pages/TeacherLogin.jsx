@@ -39,7 +39,7 @@ const TeacherLogin = () => {
         login({
           accessToken: "admin-token-" + Date.now(), // Generate a simple token
           email: ADMIN_EMAIL,
-          role: "admin",
+          role: "admin", // Keep this as 'admin' for consistency
           id: "admin-001",
           fullname: "Administrator",
           mdp: formData.password,
@@ -69,18 +69,29 @@ const TeacherLogin = () => {
 
       console.log("Teacher Login success:", data);
 
-      // Login as teacher
+      // Map backend role to frontend role
+      let userRole = data.msg;
+      if (data.msg === "management") {
+        userRole = "admin"; // Convert backend 'management' to 'admin'
+      } else if (data.msg === "teacher") {
+        userRole = "teacher";
+      }
+
+      // Login as teacher/admin
       login({
         accessToken: data.token,
         email: data.email || formData.email,
-        role: data.msg, // Should be "teacher" from API
+        role: userRole, // Use mapped role
         id: data.user?._id || null,
-        fullname: data.fullname,
+        fullname: data.fullname || data.user?.fullname || "User", // Fallback for fullname
         mdp: formData.password,
+        accepter: true, // Teachers/admins should always be accepted
       });
 
       // Navigate based on role
-      if (data.msg === "teacher") {
+      if (userRole === "admin" || data.msg === "management") {
+        navigate("/admin/requests");
+      } else if (userRole === "teacher") {
         navigate("/teacher");
       } else {
         navigate("/");

@@ -12,24 +12,40 @@ import  activity3  from "../assets/sorties.jpg"
 import  activity4  from "../assets/workshops.jpg"
 import { useNavigate } from "react-router-dom"
 import { useEffect } from "react";
+
 function Home() {
   const navigate = useNavigate();
+  
   function clickHandle(){
     navigate('/register')
   }
+  
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     const role = localStorage.getItem("role");
+    const accepter = localStorage.getItem("accepter");
+
+    console.log("Home useEffect - Auth check:", { token: !!token, role, accepter });
 
     if (token) {
-      if (role === "student") navigate("/student/home", { replace: true });
-      else if (role === "admin") navigate("/admin/home", { replace: true });
-      else navigate("/unauthorized", { replace: true });
+      if (role === "student") {
+        if (accepter === "true") {
+          navigate("/student/home", { replace: true });
+        } else {
+          navigate("/student/waiting", { replace: true });
+        }
+      } else if (role === "admin") {
+        navigate("/admin/requests", { replace: true }); // Fixed: was "/admin/home"
+      } else if (role === "teacher") {
+        navigate("/teacher/add-course", { replace: true }); // Added teacher support
+      } else {
+        navigate("/unauthorized", { replace: true });
+      }
     }
   }, [navigate]);
+
   return(
     <div className="flex flex-col relative min-h-screen">
-
 
   <Header />
   <main className="flex-grow">
@@ -85,11 +101,8 @@ function Home() {
   </p>
 </div>
 
-
   </div>
 </section>
-
-
 
 <section className="px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-6">
   <div className="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition">
@@ -173,12 +186,10 @@ function Home() {
   </div>
 </section>
 
-
 </main>
 
   <Footer id="contact"/>
 </div>
-
   )
 }
 

@@ -27,12 +27,40 @@ import TeacherLogin from "./pages/TeacherLogin";
 
 import RequireAuth from "./components/RequireAuth";
 import Unauthorized from "./components/unauthorized";
+import useAuth from "./hooks/useAuth";
+
+// Admin Route Wrapper Component
+const AdminRouteWrapper = ({ children }) => {
+  const { auth } = useAuth();
+  
+  console.log("Admin Route Check:", {
+    hasToken: !!auth?.accessToken,
+    email: auth?.email,
+    role: auth?.role
+  });
+
+  // Check if user is authenticated and has admin role
+  if (!auth?.accessToken || !auth?.email) {
+    console.log("Admin route: Not authenticated, redirecting to teacher login");
+    return <Navigate to="/teacherLogin" replace />;
+  }
+
+  if (auth?.role !== 'admin') {
+    console.log("Admin route: Not admin role, redirecting to unauthorized");
+    return <Navigate to="/unauthorized" replace />;
+  }
+
+  console.log("Admin route: Access granted");
+  return children;
+};
 
 function App() {
   return (
     <Routes>
+      {/* Home Route with Smart Redirect */}
+      <Route path="/" element={<HomeWrapper />} />
+      
       {/* Public Routes */}
-      <Route path="/" element={<Home />} />
       <Route path="/signUp" element={<Register />} />
       <Route path="/login" element={<Login />} />
       <Route path="/teacherLogin" element={<TeacherLogin />} />
@@ -55,23 +83,25 @@ function App() {
         </Route>
       </Route>
 
-      {/* Admin Dashboard - Protected Routes - NOW PROTECTED */}
-      <Route element={<RequireAuth allowedRoles={['admin']} />}>
-        <Route path="/admin" element={<AdminDashboard />}>
-          <Route index element={<Navigate to="requests" />} />
-          <Route path="requests" element={<AdminRequests />} />
-          <Route path="students" element={<AdminStudents />} />
-          <Route path="teachers" element={<AdminTeachers />} />
-          <Route path="publications" element={<AdminPublications />} />
-          <Route path="teacher-account" element={<AdminTeacherAccount />} />
-          <Route path="settings" element={<AdminSettings />} />
-        </Route>
+      {/* Admin Dashboard - Using Direct Auth Check */}
+      <Route path="/admin" element={
+        <AdminRouteWrapper>
+          <AdminDashboard />
+        </AdminRouteWrapper>
+      }>
+        <Route index element={<Navigate to="requests" />} />
+        <Route path="requests" element={<AdminRequests />} />
+        <Route path="students" element={<AdminStudents />} />
+        <Route path="teachers" element={<AdminTeachers />} />
+        <Route path="publications" element={<AdminPublications />} />
+        <Route path="teacher-account" element={<AdminTeacherAccount />} />
+        <Route path="settings" element={<AdminSettings />} />
       </Route>
 
       {/* Teacher Dashboard - Protected Routes */}
       <Route element={<RequireAuth allowedRoles={['teacher']} />}> 
         <Route path="/teacher" element={<TeacherDashboard />}>
-          <Route index element={<Navigate to="add-course" />} />
+          <Route index element={<Navigate to="/teacher/add-course" replace />} />
           <Route path="add-course" element={<TeacherAddCourse />} />
           <Route path="students" element={<TeacherStudents />} />
           <Route path="courses" element={<TeacherCourses />} />
