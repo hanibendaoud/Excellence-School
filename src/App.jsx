@@ -58,7 +58,7 @@ function App() {
   return (
     <Routes>
       {/* Home Route with Smart Redirect */}
-      <Route path="/" element={<HomeWrapper />} />
+      <Route path="/" element={<Home />} />
       
       {/* Public Routes */}
       <Route path="/signUp" element={<Register />} />
