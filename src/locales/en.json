@@ -1,0 +1,387 @@
+{
+  "dashboard": {
+    "welcome_admin": "Welcome to the Admin Dashboard",
+    "welcome_teacher": "Welcome to the Teacher Dashboard",
+    "manage": "Manage requests, students, teachers and publications",
+    "teacher_manage": "Add courses, follow students and manage discussions",
+    "logout": "Log Out",
+    "requests": "Requests",
+    "students": "Students",
+    "teachers": "Teachers",
+    "publications": "Publications",
+    "teacher_account": "Teacher Account",
+    "settings": "Settings",
+    "add_course": "Add Course",
+    "courses": "Courses",
+    "discussion": "Discussion"
+  },
+  "unauthorized": {
+    "title": "Access Denied",
+    "message": "You don't have permission to access this page.",
+    "go_back": "Go Back",
+    "go_home": "Go to Home",
+    "logout": "Logout"
+  },
+  "adminPublications": {
+    "type": "Publication Type",
+    "image": "Image",
+    "video": "Video",
+    "placeholder": "Write your publication...",
+    "publish": "Publish",
+    "selectedFile": "Selected file",
+    "alertEmpty": "Publication content cannot be empty",
+    "alertNoFile": "Please attach a file",
+    "success": "Publication published successfully!",
+    "error": "Error publishing publication",
+    "fail": "Failed to publish. Please try again.",
+    "invalidFile": "Invalid file type. Please select a valid {{fileType}} file.",
+    "maxSize": "File size must be less than {{size}} MB"
+  },
+  "adminRequests": {
+    "loading": "Loading requests...",
+    "noRequests": "No pending requests",
+    "selectTeacher": "Select Teacher",
+    "noTeachers": "⚠️ No teachers available",
+    "selectClassroom": "Select Classroom",
+    "selectTiming": "Select Timing",
+    "selectDay": "Select Day",
+    "accept": "Accept",
+    "reject": "Reject",
+    "noTeachersForSubject": "No teachers available for"
+  },
+  "days": {
+    "sunday": "Sunday",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday"
+  },
+  "adminSettings": {
+    "existing": "Existing items",
+    "noItems": "No items found",
+    "delete": "Delete",
+
+    "levels": {
+      "title": "Academic Levels",
+      "placeholder": "Enter a level",
+      "loading": "Adding level...",
+      "add": "Add Level"
+    },
+    "classrooms": {
+      "title": "Classrooms",
+      "placeholder": "Enter a classroom",
+      "loading": "Adding classroom...",
+      "add": "Add Classroom"
+    },
+    "timings": {
+      "title": "Timings",
+      "placeholder": "Enter a timing",
+      "loading": "Adding timing...",
+      "add": "Add Timing"
+    },
+    "materials": {
+      "title": "Subjects",
+      "placeholder": "Enter a subject",
+      "loading": "Adding subject...",
+      "add": "Add Subject"
+    },
+    "admin": {
+      "title": "Create Admin",
+      "fullname": "Full Name",
+      "email": "Email Address",
+      "password": "Password",
+      "loading": "Creating admin...",
+      "create": "Create Admin"
+    },
+
+    "errors": {
+      "fillField": "Please fill in all fields.",
+      "operationFailed": "Operation failed.",
+      "network": "Network error. Try again."
+    },
+    "success": {
+      "levelAdded": "Level added successfully!",
+      "classroomAdded": "Classroom added successfully!",
+      "timingAdded": "Timing added successfully!",
+      "materialAdded": "Subject added successfully!",
+      "adminCreated": "Admin created successfully!"
+    }
+  },
+  "adminStudents": {
+    "loading": "Loading students...",
+    "retry": "Retry",
+    "search": {
+      "placeholder": "Search by name or email"
+    },
+    "noStudents": "No students available.",
+    "noResults": "No students found matching your search.",
+    "subjects": {
+      "current": "Current Subjects:",
+      "teacher": "Teacher",
+      "room": "Room"
+    },
+    "actions": {
+      "addSubject": "Add Subject",
+      "delete": "Delete"
+    },
+    "modal": {
+      "title": "Add New Subject",
+      "select": {
+        "subject": "Select a subject",
+        "teacher": "Select a teacher",
+        "classroom": "Select a classroom",
+        "timing": "Select a timing",
+        "day": "Select a day"
+      },
+      "cancel": "Cancel",
+      "confirm": "Add Subject",
+      "loading": "Adding..."
+    },
+    "errors": {
+      "load": "Failed to load students. Please try again.",
+      "fillFields": "Please fill in all fields.",
+      "addSubject": "Failed to add subject. Please try again.",
+      "deleteStudent": "Failed to delete student.",
+      "teachersNotLoaded": "⚠️ Teachers not loaded"
+    },
+    "success": {
+      "subjectAdded": "✅ Subject \"{{subject}}\" added successfully for {{email}}!",
+      "studentDeleted": "✅ Student deleted successfully."
+    },
+    "confirm": {
+      "deleteStudent": "Are you sure you want to delete this student?"
+    }
+  },
+  "adminTeachers": {
+    "form": {
+      "fullName": "Full Name",
+      "phone": "Phone Number",
+      "email": "Email Address",
+      "password": "Password",
+      "selectSpeciality": "Select Speciality"
+    },
+    "actions": {
+      "create": "Create Teacher"
+    },
+    "errors": {
+      "fillFields": "Please fill all fields.",
+      "create": "Error creating teacher.",
+      "network": "Failed to create teacher. Please try again."
+    },
+    "success": {
+      "created": "✅ Teacher created: {{name}}"
+    }
+  },
+  "teachersManagement": {
+    "loading": "Loading teachers...",
+    "search": {
+      "placeholder": "Search"
+    },
+    "noTeachers": "No teachers found",
+    "actions": {
+      "delete": "Delete",
+      "cancel": "Cancel"
+    },
+    "confirmDelete": {
+      "text": "Delete {{name}}?"
+    },
+    "success": {
+      "deleted": "Teacher deleted successfully"
+    },
+    "errors": {
+      "fetch": "Failed to fetch teachers",
+      "network": "Error fetching teachers",
+      "delete": "Failed to delete teacher",
+      "networkDelete": "Error deleting teacher"
+    }
+  },
+  "teacherAddCourse": {
+    "title": "Add a New Course",
+    "form": {
+      "courseTitle": "Course Title",
+      "selectLevel": "Select Level",
+      "selectType": "Select Type",
+      "video": "Video"
+    },
+    "actions": {
+      "add": "Add Course",
+      "uploading": "Uploading..."
+    },
+    "errors": {
+      "fillFields": "⚠️ Please fill all fields and upload a file.",
+      "noEmail": "⚠️ Teacher email not found. Please log in again.",
+      "failed": "❌ Failed to add course.",
+      "network": "❌ Error uploading course. Try again.",
+      "levels": "❌ Failed to load levels."
+    },
+    "success": {
+      "added": "✅ Course added successfully!"
+    }
+  },
+  "teacherCourses": {
+    "title": "Added Courses",
+    "loading": "⏳ Loading courses...",
+    "noCourses": "No courses available at the moment.",
+    "actions": {
+      "delete": "Delete"
+    },
+    "confirm": {
+      "delete": "Are you sure you want to delete this course?"
+    },
+    "success": {
+      "deleted": "✅ Course deleted successfully"
+    },
+    "errors": {
+      "noEmail": "⚠️ Teacher email not found. Please log in again.",
+      "failed": "❌ Failed to delete course",
+      "network": "❌ Network error while deleting.",
+      "load": "❌ Error loading courses."
+    }
+  },
+  "teacherDiscussion": {
+    "title": "Discussion",
+    "subtitle": "Connect with students",
+    "noMessages": "No messages yet. Start the conversation!",
+    "connected": "Connected",
+    "disconnected": "Disconnected",
+    "placeholder": "Type your message here...",
+    "send": "Send",
+    "errors": {
+      "noEmail": "❌ Error: Teacher email not found in localStorage",
+      "noSocket": "❌ Socket connection not established",
+      "notConnected": "⚠️ Socket exists but not connected"
+    },
+    "debug": "Debug: Check browser console (F12) for detailed logs"
+  },
+  
+  "teacherStudents": {
+    "title": "Students List",
+    "loading": "⏳ Loading students...",
+    "noStudents": "No students available",
+    "delete": "Delete",
+    "confirmDelete": "Do you want to delete this student?",
+    "successDelete": "✅ Student deleted successfully",
+    "errorDelete": "❌ Failed to delete student:",
+    "errorGeneric": "❌ Error while deleting student",
+    "errors": {
+      "noEmail": "⚠️ Teacher email not found. Please log in again."
+    }
+  },
+  "studentDashboard": {
+    "portal": "Student Portal",
+    "logout": "Log Out",
+    "welcome": "Welcome to your dashboard",
+    "manage": "Manage your lessons and timetable",
+    "unknown": "Unknown Student",
+    "noLevel": "No level assigned",
+    "nav": {
+      "home": "Home",
+      "timetable": "Timetable",
+      "lessons": "Lessons",
+      "discussion": "Discussion"
+    }
+  },
+  "studentDiscussion": {
+    "teachers": "Teachers",
+    "loading": "Loading...",
+    "online": "Online",
+    "offline": "Offline",
+    "noSubjects": "No subjects available",
+    "discussions": "Discussions",
+    "selectTeacher": "Choose a teacher to view messages",
+    "disconnected": "Disconnected",
+    "chooseTeacher": "Select a teacher from the list to start the conversation",
+    "loadingMessages": "Loading messages...",
+    "noMessages": "No messages from this teacher yet",
+    "teacher": "Teacher",
+    "readOnly": "📖 This page is for reading teacher messages only",
+    "errorNoId": "❌ Error: Student ID not found"
+  },
+  "studentHome": {
+    "noAnnouncements": "No announcements available",
+    "noVideoSupport": "Your browser does not support the video tag.",
+    "downloadFile": "Download file"
+  },
+  "studentLessons": {
+    "subjectsAndTeachers": "Subjects and Teachers",
+    "loading": "Loading...",
+    "noSubjects": "No subjects available",
+    "lessons": "Lessons",
+    "loadingLessons": "Loading lessons...",
+    "noLessonsForTeacher": "No lessons available for this teacher",
+    "selectSubject": "Select a subject to view lessons",
+    "teacherLabel": "Teacher"
+  },
+  "studentTimetable": {
+  "titles": {
+    "timetable": "Timetable"
+  },
+  "days": {
+    "all": "All days",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday"
+  },
+  "labels": {
+    "teacher": "Teacher",
+    "day": "Day",
+    "selectedDay": "Selected day"
+  },
+  "placeholders": {
+    "notSpecified": "Not specified"
+  },
+  "messages": {
+    "loading": "Loading...",
+    "noClasses": "No classes for this day",
+    "loginRequired": "Please log in to view the timetable"
+  },
+  "errors": {
+    "fetchSchedule": "Failed to fetch timetable"
+  }
+},
+"studentWaiting": {
+  "labels": {
+    "logoAlt": "Excellence School logo",
+    "schoolName": "Excellence School",
+    "schoolSubtitle": "Excellence Private School",
+    "nextStepsTitle": "What's Next:",
+    "yourInfo": "Your Information:",
+    "email": "Email",
+    "password": "Password",
+    "level": "Academic Level",
+    "status": "Status",
+    "pendingApproval": "Pending Approval",
+    "nextSteps": {
+      "adminReview": "Our admin will review your subjects and assign teachers",
+      "dashboardAccess": "You'll receive access to your dashboard once approved",
+      "autoRefresh": "This page will automatically refresh when you're accepted"
+    }
+  },
+  "titles": {
+    "underReview": "Application Under Review"
+  },
+  "messages": {
+    "welcome": "Welcome! Your registration has been submitted successfully and is currently being reviewed by our admin team.",
+    "pending": "Your application is still being reviewed. Please wait for approval.",
+    "autoRefreshInfo": "This page automatically checks your status every 30 seconds."
+  },
+  "buttons": {
+    "checkStatus": "Check Status Now",
+    "checking": "Checking...",
+    "logout": "Logout"
+  },
+  "errors": {
+    "checkStatus": "Error checking acceptance status",
+    "tryLater": "Error checking your status. Please try again later."
+  }
+}
+
+
+
+}

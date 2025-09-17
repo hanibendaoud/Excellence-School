@@ -1,218 +1,159 @@
+// src/pages/StudentWaiting.jsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
+import { useTranslation } from "react-i18next";
 import logo from "../assets/logo.svg";
 import wave from "../assets/wave.svg";
 
 const StudentWaiting = () => {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { auth, logout, login } = useAuth();
   const [checkingStatus, setCheckingStatus] = useState(false);
+  const [email, setEmail] = useState(auth?.email || "");
+  const [password, setPassword] = useState(auth?.mdp || "");
 
-  // Auto-refresh to check acceptance status every 30 seconds
-  useEffect(() => {
-    const checkAcceptanceStatus = async () => {
-      if (!auth?.email) return;
-
-      try {
-        setCheckingStatus(true);
-        const response = await fetch("https://excellenceschool.onrender.com/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: auth.email, password: auth.mdp }) // You might need a better endpoint
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          const isAccepted = data.accepeter || data.user.accepeter;
-          
-          if (isAccepted) {
-            // Update auth with new acceptance status
-            login({
-              ...auth,
-              accepter: true
-            });
-            navigate("/student/home");
-          }
-        }
-      } catch (error) {
-        console.error("Error checking acceptance status:", error);
-      } finally {
-        setCheckingStatus(false);
-      }
-    };
-
-    // Check immediately
-    checkAcceptanceStatus();
-
-    // Set up interval to check every 30 seconds
-    const interval = setInterval(checkAcceptanceStatus, 30000);
-
-    return () => clearInterval(interval);
-  }, [auth?.email, navigate, login, auth]);
-
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
+  const changeLanguage = (lang) => {
+    i18n.changeLanguage(lang);
   };
-  const handleRefresh = async () => {
-    if (!auth?.email) return;
-    
+  const checkAcceptanceStatus = async (inputEmail = email, inputPassword = password) => {
+    if (!inputEmail || !inputPassword) return;
+
     try {
       setCheckingStatus(true);
       const response = await fetch("https://excellenceschool.onrender.com/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: auth.email, password: auth.mdp }) 
+        body: JSON.stringify({ email: inputEmail, password: inputPassword })
       });
 
       if (response.ok) {
         const data = await response.json();
         const isAccepted = data.accepeter || data.user.accepeter;
-        
+
         if (isAccepted) {
-          login({
-            ...auth,
-            accepter: true
-          });
+          login({ ...auth, email: inputEmail, mdp: inputPassword, accepter: true });
           navigate("/student/home");
         } else {
-          // Show a message that they're still pending
-          alert("Your application is still being reviewed. Please wait for approval.");
+          alert(t("studentWaiting.messages.pending"));
         }
       }
     } catch (error) {
-      console.error("Error checking status:", error);
-      alert("Error checking your status. Please try again later.");
+      console.error(t("studentWaiting.errors.checkStatus"), error);
+      alert(t("studentWaiting.errors.tryLater"));
     } finally {
       setCheckingStatus(false);
     }
   };
 
+  useEffect(() => {
+    // Auto-refresh every 30s
+    const interval = setInterval(() => checkAcceptanceStatus(email, password), 30000);
+    return () => clearInterval(interval);
+  }, [email, password]);
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden bg-gradient-to-br from-orange-50 to-white">
-      {/* Background waves */}
-      <img 
-        src={wave} 
-        alt="wave background" 
-        className="absolute top-0 right-0 w-[28rem] md:w-[36rem] pointer-events-none select-none z-0 opacity-30"
-      />
-      <img 
-        src={wave} 
-        alt="wave background" 
-        className="absolute bottom-0 left-0 w-[28rem] md:w-[36rem] rotate-180 pointer-events-none select-none z-0 opacity-30"
-      />
+  <div className="h-screen flex items-center justify-center p-4 relative overflow-hidden bg-gradient-to-br from-orange-50 to-white">
+    {/* Decorative Waves */}
+    <img src={wave} alt="wave" className="absolute top-0 right-0 w-64 md:w-80 pointer-events-none select-none z-0 opacity-20" />
+    <img src={wave} alt="wave" className="absolute bottom-0 left-0 w-64 md:w-80 rotate-180 pointer-events-none select-none z-0 opacity-20" />
 
-      <div className="relative z-10 max-w-2xl mx-auto text-center">
-        {/* Logo and School Info */}
-        <div className="mb-8">
-          <img 
-            src={logo} 
-            alt="Excellence School logo" 
-            className="w-24 h-24 mx-auto mb-4 animate-pulse"
-          />
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Excellence School</h1>
-          <p className="text-gray-600 text-lg">مدرسة التميز الخاصة</p>
-        </div>
-
-        {/* Waiting Message */}
-        <div className="bg-white rounded-xl shadow-lg p-8 mb-6">
-          <div className="mb-6">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-orange-100 flex items-center justify-center">
-              <svg 
-                className="w-8 h-8 text-orange-500 animate-spin" 
-                xmlns="http://www.w3.org/2000/svg" 
-                fill="none" 
-                viewBox="0 0 24 24"
-              >
-                <circle 
-                  className="opacity-25" 
-                  cx="12" 
-                  cy="12" 
-                  r="10" 
-                  stroke="currentColor" 
-                  strokeWidth="4"
-                />
-                <path 
-                  className="opacity-75" 
-                  fill="currentColor" 
-                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                />
-              </svg>
-            </div>
-            
-            <h2 className="text-2xl font-semibold text-gray-800 mb-3">
-              Application Under Review
-            </h2>
-            
-            <p className="text-gray-600 mb-4">
-              Welcome! Your registration has been submitted successfully and is currently being reviewed by our admin team.
-            </p>
-            
-            <div className="bg-blue-50 border-l-4 border-blue-400 p-4 text-left">
-              <div className="flex">
-                <div className="ml-3">
-                  <p className="text-sm text-blue-800">
-                    <strong>What's Next:</strong>
-                  </p>
-                  <ul className="mt-2 text-sm text-blue-700 list-disc list-inside space-y-1">
-                    <li>Our admin will review your subjects and assign teachers</li>
-                    <li>You'll receive access to your dashboard once approved</li>
-                    <li>This page will automatically refresh when you're accepted</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Student Info */}
-          <div className="bg-gray-50 rounded-lg p-4 mb-6">
-            <h3 className="font-semibold text-gray-700 mb-2">Your Information:</h3>
-            <div className="text-sm text-gray-600 space-y-1">
-              <p><strong>Email:</strong> {auth?.email}</p>
-              <p><strong>Academic Level:</strong> {auth?.level}</p>
-              <p><strong>Status:</strong> <span className="text-orange-600">Pending Approval</span></p>
-            </div>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-3">
-            <button
-              onClick={handleRefresh}
-              disabled={checkingStatus}
-              className={`flex-1 px-6 py-3 bg-orange-500 text-white rounded-lg font-medium transition-colors ${
-                checkingStatus ? "opacity-50 cursor-not-allowed" : "hover:bg-orange-600"
-              }`}
-            >
-              {checkingStatus ? (
-                <div className="flex items-center justify-center gap-2">
-                  <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
-                  </svg>
-                  Checking...
-                </div>
-              ) : (
-                "Check Status Now"
-              )}
-            </button>
-            
-            <button
-              onClick={handleLogout}
-              className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors"
-            >
-              Logout
-            </button>
-          </div>
-        </div>
-
-        {/* Auto-refresh info */}
-        <p className="text-sm text-gray-500">
-          This page automatically checks your status every 30 seconds
-        </p>
+    {/* Content Container */}
+    <div className="relative z-10 w-full max-w-3xl h-full flex flex-col justify-center items-center text-center">
+      
+      {/* Language Selector */}
+      <div className="absolute top-4 right-4">
+        <select
+          className="border rounded-lg px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+          value={i18n.language}
+          onChange={(e) => changeLanguage(e.target.value)}
+        >
+          <option value="ar">العربية</option>
+          <option value="fr">Français</option>
+          <option value="en">English</option>
+        </select>
       </div>
+
+      {/* Main Card */}
+      <div className="bg-white rounded-2xl shadow-xl px-6 py-4 w-full max-w-xl">
+        {/* Logo and Title */}
+        <div className="mb-4">
+          <img src={logo} alt={t("studentWaiting.labels.logoAlt")} className="w-16 h-16 mx-auto mb-2 animate-pulse" />
+          <h1 className="text-2xl font-bold text-gray-800">{t("studentWaiting.labels.schoolName")}</h1>
+          <p className="text-gray-600 text-sm">{t("studentWaiting.labels.schoolSubtitle")}</p>
+        </div>
+
+        {/* Email & Password */}
+        <div className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-3">
+          <input
+            type="email"
+            placeholder={t("studentWaiting.labels.email")}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="border rounded px-3 py-2 w-full sm:w-1/2 text-sm"
+          />
+          <input
+            type="password"
+            placeholder={t("studentWaiting.labels.password")}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="border rounded px-3 py-2 w-full sm:w-1/2 text-sm"
+          />
+        </div>
+
+        {/* Check Button */}
+        <button
+          onClick={() => checkAcceptanceStatus(email, password)}
+          disabled={checkingStatus}
+          className={`w-full sm:w-auto px-6 py-2 bg-orange-500 text-white rounded font-medium text-sm transition-colors ${checkingStatus ? "opacity-50 cursor-not-allowed" : "hover:bg-orange-600"}`}
+        >
+          {checkingStatus ? t("studentWaiting.buttons.checking") : t("studentWaiting.buttons.checkStatus")}
+        </button>
+
+        {/* Review Message */}
+        <div className="mt-4 text-left">
+          <h2 className="text-lg font-semibold text-gray-800">{t("studentWaiting.titles.underReview")}</h2>
+          <p className="text-sm text-gray-600">{t("studentWaiting.messages.welcome")}</p>
+
+          <div className="bg-blue-50 border-l-4 border-blue-400 p-3 mt-2 text-sm text-blue-700 rounded">
+            <p className="font-bold">{t("studentWaiting.labels.nextStepsTitle")}</p>
+            <ul className="list-disc list-inside mt-1 space-y-1">
+              <li>{t("studentWaiting.labels.nextSteps.adminReview")}</li>
+              <li>{t("studentWaiting.labels.nextSteps.dashboardAccess")}</li>
+              <li>{t("studentWaiting.labels.nextSteps.autoRefresh")}</li>
+            </ul>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-3 mt-3 text-sm text-gray-600">
+            <p><strong>{t("studentWaiting.labels.email")}:</strong> {email}</p>
+            <p><strong>{t("studentWaiting.labels.level")}:</strong> {auth?.level}</p>
+            <p><strong>{t("studentWaiting.labels.status")}:</strong> <span className="text-orange-600">{t("studentWaiting.labels.pendingApproval")}</span></p>
+          </div>
+        </div>
+
+        {/* Logout */}
+        <div className="mt-4">
+          <button
+            onClick={handleLogout}
+            className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors w-full sm:w-auto text-sm"
+          >
+            {t("studentWaiting.buttons.logout")}
+          </button>
+        </div>
+      </div>
+
+      {/* Auto Refresh Info */}
+      <p className="mt-3 text-xs text-gray-500">{t("studentWaiting.messages.autoRefreshInfo")}</p>
     </div>
-  );
+  </div>
+);
+
 };
 
 export default StudentWaiting;

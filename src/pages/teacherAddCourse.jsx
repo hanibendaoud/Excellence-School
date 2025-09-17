@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 const baseUrl = "https://excellenceschool.onrender.com";
 
 const TeacherAddCourse = () => {
+  const { t } = useTranslation();
+
   const [form, setForm] = useState({
     title: "",
     level: "",
@@ -21,6 +24,7 @@ const TeacherAddCourse = () => {
       setLevels(Array.isArray(data) ? data.filter(Boolean) : []);
     } catch (error) {
       console.error("Error fetching levels:", error);
+      alert(t("teacherAddCourse.errors.levels"));
     }
   };
 
@@ -41,7 +45,7 @@ const TeacherAddCourse = () => {
     e.preventDefault();
 
     if (!form.title || !form.level || !form.type || !form.file) {
-      alert("⚠️ Please fill all fields and upload a file");
+      alert(t("teacherAddCourse.errors.fillFields"));
       return;
     }
 
@@ -49,7 +53,7 @@ const TeacherAddCourse = () => {
     const teacherEmail = localStorage.getItem("email");
 
     if (!teacherEmail) {
-      alert("⚠️ Teacher email not found. Please log in again.");
+      alert(t("teacherAddCourse.errors.noEmail"));
       return;
     }
 
@@ -62,24 +66,24 @@ const TeacherAddCourse = () => {
 
     try {
       setLoading(true);
-      
+
       const response = await fetch(`${baseUrl}/addcourse`, {
         method: "POST",
         body: formData,
       });
 
       if (response.ok) {
-        alert("✅ Course added successfully!");
+        alert(t("teacherAddCourse.success.added"));
         setForm({ title: "", level: "", type: "", file: null });
         // Reset file input
         const fileInput = document.querySelector('input[type="file"]');
-        if (fileInput) fileInput.value = '';
+        if (fileInput) fileInput.value = "";
       } else {
-        alert("❌ Failed to add course.");
+        alert(t("teacherAddCourse.errors.failed"));
       }
     } catch (error) {
       console.error("Error uploading course:", error);
-      alert("❌ Error uploading course. Try again.");
+      alert(t("teacherAddCourse.errors.network"));
     } finally {
       setLoading(false);
     }
@@ -87,7 +91,9 @@ const TeacherAddCourse = () => {
 
   return (
     <div className="p-6 max-w-xl mx-auto space-y-6">
-      <h2 className="text-2xl font-bold text-orange-500">Add a New Course</h2>
+      <h2 className="text-2xl font-bold text-orange-500">
+        {t("teacherAddCourse.title")}
+      </h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Course Title */}
@@ -96,7 +102,7 @@ const TeacherAddCourse = () => {
           name="title"
           value={form.title}
           onChange={handleChange}
-          placeholder="Course Title"
+          placeholder={t("teacherAddCourse.form.courseTitle")}
           className="w-full p-3 border rounded-lg"
         />
 
@@ -107,7 +113,7 @@ const TeacherAddCourse = () => {
           onChange={handleChange}
           className="w-full p-3 border rounded-lg"
         >
-          <option value="">Select Level</option>
+          <option value="">{t("teacherAddCourse.form.selectLevel")}</option>
           {levels.map((lvl, index) => (
             <option key={index} value={lvl}>
               {lvl}
@@ -122,9 +128,9 @@ const TeacherAddCourse = () => {
           onChange={handleChange}
           className="w-full p-3 border rounded-lg"
         >
-          <option value="">Select Type</option>
+          <option value="">{t("teacherAddCourse.form.selectType")}</option>
           <option value="Pdf">PDF</option>
-          <option value="Video">Video</option>
+          <option value="Video">{t("teacherAddCourse.form.video")}</option>
         </select>
 
         {/* File Upload */}
@@ -152,7 +158,9 @@ const TeacherAddCourse = () => {
               : "bg-orange-500 hover:bg-orange-600"
           }`}
         >
-          {loading ? "Uploading..." : "Add Course"}
+          {loading
+            ? t("teacherAddCourse.actions.uploading")
+            : t("teacherAddCourse.actions.add")}
         </button>
       </form>
     </div>

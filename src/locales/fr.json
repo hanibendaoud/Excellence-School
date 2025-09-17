@@ -1,0 +1,387 @@
+{
+  "dashboard": {
+    "welcome_admin": "Bienvenue sur le tableau de bord administrateur",
+    "welcome_teacher": "Bienvenue sur le tableau de bord enseignant",
+    "manage": "Gérez les demandes, les étudiants, les enseignants et les publications",
+    "teacher_manage": "Ajoutez des cours, suivez les étudiants et gérez les discussions",
+    "logout": "Se déconnecter",
+    "requests": "Demandes",
+    "students": "Étudiants",
+    "teachers": "Enseignants",
+    "publications": "Publications",
+    "teacher_account": "Compte enseignant",
+    "settings": "Paramètres",
+    "add_course": "Ajouter un cours",
+    "courses": "Cours",
+    "discussion": "Discussion"
+  },
+  "unauthorized": {
+    "title": "Accès refusé",
+    "message": "Vous n'avez pas la permission d'accéder à cette page.",
+    "go_back": "Retour",
+    "go_home": "Accueil",
+    "logout": "Déconnexion"
+  },
+
+  "adminPublications": {
+    "type": "Type de publication",
+    "image": "Image",
+    "video": "Vidéo",
+    "placeholder": "Écrivez votre publication...",
+    "publish": "Publier",
+    "selectedFile": "Fichier sélectionné",
+    "alertEmpty": "Le contenu de la publication ne peut pas être vide",
+    "alertNoFile": "Veuillez joindre un fichier",
+    "success": "Publication ajoutée avec succès !",
+    "error": "Erreur lors de la publication",
+    "fail": "Échec de la publication. Veuillez réessayer.",
+    "invalidFile": "Type de fichier invalide. Veuillez sélectionner un fichier {{fileType}} valide.",
+    "maxSize": "La taille du fichier doit être inférieure à {{size}} MB"
+  },
+  "adminRequests": {
+    "loading": "Chargement des demandes...",
+    "noRequests": "Aucune demande en attente",
+    "selectTeacher": "Sélectionner un enseignant",
+    "noTeachers": "⚠️ Aucun enseignant disponible",
+    "selectClassroom": "Sélectionner une salle",
+    "selectTiming": "Sélectionner un horaire",
+    "selectDay": "Sélectionner un jour",
+    "accept": "Accepter",
+    "reject": "Rejeter",
+    "noTeachersForSubject": "Aucun enseignant disponible pour"
+  },
+  "days": {
+    "sunday": "Dimanche",
+    "monday": "Lundi",
+    "tuesday": "Mardi",
+    "wednesday": "Mercredi",
+    "thursday": "Jeudi",
+    "friday": "Vendredi",
+    "saturday": "Samedi"
+  },
+  "adminSettings": {
+    "existing": "Éléments existants",
+    "noItems": "Aucun élément trouvé",
+    "delete": "Supprimer",
+
+    "levels": {
+      "title": "Niveaux académiques",
+      "placeholder": "Entrer un niveau",
+      "loading": "Ajout du niveau...",
+      "add": "Ajouter un niveau"
+    },
+    "classrooms": {
+      "title": "Salles de classe",
+      "placeholder": "Entrer une salle",
+      "loading": "Ajout de la salle...",
+      "add": "Ajouter une salle"
+    },
+    "timings": {
+      "title": "Horaires",
+      "placeholder": "Entrer un horaire",
+      "loading": "Ajout de l'horaire...",
+      "add": "Ajouter un horaire"
+    },
+    "materials": {
+      "title": "Matières",
+      "placeholder": "Entrer une matière",
+      "loading": "Ajout de la matière...",
+      "add": "Ajouter une matière"
+    },
+    "admin": {
+      "title": "Créer un administrateur",
+      "fullname": "Nom complet",
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "loading": "Création en cours...",
+      "create": "Créer l'administrateur"
+    },
+
+    "errors": {
+      "fillField": "Veuillez remplir tous les champs.",
+      "operationFailed": "L'opération a échoué.",
+      "network": "Erreur réseau. Réessayez."
+    },
+    "success": {
+      "levelAdded": "Niveau ajouté avec succès !",
+      "classroomAdded": "Salle ajoutée avec succès !",
+      "timingAdded": "Horaire ajouté avec succès !",
+      "materialAdded": "Matière ajoutée avec succès !",
+      "adminCreated": "Administrateur créé avec succès !"
+    }
+  },
+  "adminStudents": {
+    "loading": "Chargement des étudiants...",
+    "retry": "Réessayer",
+    "search": {
+      "placeholder": "Rechercher par nom ou e-mail"
+    },
+    "noStudents": "Aucun étudiant disponible.",
+    "noResults": "Aucun étudiant trouvé correspondant à votre recherche.",
+    "subjects": {
+      "current": "Matières actuelles :",
+      "teacher": "Enseignant",
+      "room": "Salle"
+    },
+    "actions": {
+      "addSubject": "Ajouter une matière",
+      "delete": "Supprimer"
+    },
+    "modal": {
+      "title": "Ajouter une nouvelle matière",
+      "select": {
+        "subject": "Choisissez une matière",
+        "teacher": "Choisissez un enseignant",
+        "classroom": "Choisissez une salle",
+        "timing": "Choisissez un horaire",
+        "day": "Choisissez un jour"
+      },
+      "cancel": "Annuler",
+      "confirm": "Ajouter la matière",
+      "loading": "Ajout en cours..."
+    },
+    "errors": {
+      "load": "Échec du chargement des étudiants. Veuillez réessayer.",
+      "fillFields": "Veuillez remplir tous les champs.",
+      "addSubject": "Échec de l'ajout de la matière. Veuillez réessayer.",
+      "deleteStudent": "Échec de la suppression de l'étudiant.",
+      "teachersNotLoaded": "⚠️ Les enseignants n'ont pas été chargés"
+    },
+    "success": {
+      "subjectAdded": "✅ La matière \"{{subject}}\" a été ajoutée avec succès pour {{email}} !",
+      "studentDeleted": "✅ Étudiant supprimé avec succès."
+    },
+    "confirm": {
+      "deleteStudent": "Êtes-vous sûr de vouloir supprimer cet étudiant ?"
+    }
+  },
+  "adminTeachers": {
+    "form": {
+      "fullName": "Nom complet",
+      "phone": "Numéro de téléphone",
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "selectSpeciality": "Choisir une spécialité"
+    },
+    "actions": {
+      "create": "Créer un enseignant"
+    },
+    "errors": {
+      "fillFields": "Veuillez remplir tous les champs.",
+      "create": "Erreur lors de la création de l'enseignant.",
+      "network": "Échec de la création. Veuillez réessayer."
+    },
+    "success": {
+      "created": "✅ Enseignant créé : {{name}}"
+    }
+  },
+  "teachersManagement": {
+    "loading": "Chargement des enseignants...",
+    "search": {
+      "placeholder": "Rechercher"
+    },
+    "noTeachers": "Aucun enseignant trouvé",
+    "actions": {
+      "delete": "Supprimer",
+      "cancel": "Annuler"
+    },
+    "confirmDelete": {
+      "text": "Supprimer {{name}} ?"
+    },
+    "success": {
+      "deleted": "✅ Enseignant supprimé avec succès"
+    },
+    "errors": {
+      "fetch": "Échec du chargement des enseignants",
+      "network": "Erreur lors du chargement des enseignants",
+      "delete": "Échec de la suppression de l'enseignant",
+      "networkDelete": "Erreur lors de la suppression de l'enseignant"
+    }
+  },
+  "teacherAddCourse": {
+    "title": "Ajouter un nouveau cours",
+    "form": {
+      "courseTitle": "Titre du cours",
+      "selectLevel": "Sélectionner un niveau",
+      "selectType": "Sélectionner un type",
+      "video": "Vidéo"
+    },
+    "actions": {
+      "add": "Ajouter le cours",
+      "uploading": "Téléversement en cours..."
+    },
+    "errors": {
+      "fillFields": "⚠️ Veuillez remplir tous les champs et télécharger un fichier.",
+      "noEmail": "⚠️ Email de l'enseignant introuvable. Veuillez vous reconnecter.",
+      "failed": "❌ Échec de l'ajout du cours.",
+      "network": "❌ Erreur réseau lors du téléversement.",
+      "levels": "❌ Impossible de charger les niveaux."
+    },
+    "success": {
+      "added": "✅ Cours ajouté avec succès !"
+    }
+  },
+  "teacherCourses": {
+    "title": "Cours ajoutés",
+    "loading": "⏳ Chargement des cours...",
+    "noCourses": "Aucun cours disponible pour le moment.",
+    "actions": {
+      "delete": "Supprimer"
+    },
+    "confirm": {
+      "delete": "Voulez-vous vraiment supprimer ce cours ?"
+    },
+    "success": {
+      "deleted": "✅ Cours supprimé avec succès"
+    },
+    "errors": {
+      "noEmail": "⚠️ Email enseignant introuvable. Veuillez vous reconnecter.",
+      "failed": "❌ Échec de la suppression du cours",
+      "network": "❌ Erreur réseau lors de la suppression.",
+      "load": "❌ Erreur lors du chargement des cours."
+    }
+  },
+  "teacherDiscussion": {
+    "title": "Discussion",
+    "subtitle": "Échangez avec les étudiants",
+    "noMessages": "Aucun message pour l'instant. Lancez la conversation !",
+    "connected": "Connecté",
+    "disconnected": "Déconnecté",
+    "placeholder": "Écrivez votre message ici...",
+    "send": "Envoyer",
+    "errors": {
+      "noEmail": "❌ Erreur : adresse e-mail introuvable dans le stockage local",
+      "noSocket": "❌ Connexion socket non établie",
+      "notConnected": "⚠️ La socket existe mais n'est pas connectée"
+    },
+    "debug": "Debug : Ouvrez la console (F12) pour voir les logs"
+  },
+  "teacherStudents": {
+    "title": "Liste des étudiants",
+    "loading": "⏳ Chargement des étudiants...",
+    "noStudents": "Aucun étudiant pour le moment",
+    "delete": "Supprimer",
+    "confirmDelete": "Voulez-vous supprimer cet étudiant ?",
+    "successDelete": "✅ Étudiant supprimé avec succès",
+    "errorDelete": "❌ Échec de la suppression de l'étudiant :",
+    "errorGeneric": "❌ Erreur lors de la suppression de l'étudiant",
+    "errors": {
+      "noEmail": "⚠️ Email de l’enseignant introuvable. Veuillez vous reconnecter."
+    }
+  },
+  "studentDashboard": {
+    "portal": "Portail Étudiant",
+    "logout": "Se déconnecter",
+    "welcome": "Bienvenue sur votre tableau de bord",
+    "manage": "Gérez vos cours et votre emploi du temps",
+    "unknown": "Étudiant inconnu",
+    "noLevel": "Aucun niveau assigné",
+    "nav": {
+      "home": "Accueil",
+      "timetable": "Emploi du temps",
+      "lessons": "Cours",
+      "discussion": "Discussion"
+    }
+  },
+  "studentDiscussion": {
+    "teachers": "Professeurs",
+    "loading": "Chargement...",
+    "online": "En ligne",
+    "offline": "Hors ligne",
+    "noSubjects": "Aucune matière disponible",
+    "discussions": "Discussions",
+    "selectTeacher": "Choisissez un professeur pour voir les messages",
+    "disconnected": "Déconnecté",
+    "chooseTeacher": "Sélectionnez un professeur dans la liste pour commencer la conversation",
+    "loadingMessages": "Chargement des messages...",
+    "noMessages": "Aucun message de ce professeur pour le moment",
+    "teacher": "Professeur",
+    "readOnly": "📖 Cette page est uniquement destinée à la lecture des messages des professeurs",
+    "errorNoId": "❌ Erreur : Identifiant étudiant introuvable"
+  },
+  "studentHome": {
+    "noAnnouncements": "Aucune publication pour le moment",
+    "noVideoSupport": "Votre navigateur ne prend pas en charge la balise vidéo.",
+    "downloadFile": "Télécharger le fichier"
+  },
+  "studentLessons": {
+    "subjectsAndTeachers": "Matières et enseignants",
+    "loading": "Chargement...",
+    "noSubjects": "Aucune matière disponible",
+    "lessons": "Leçons",
+    "loadingLessons": "Chargement des leçons...",
+    "noLessonsForTeacher": "Aucune leçon disponible pour cet enseignant",
+    "selectSubject": "Sélectionnez une matière pour voir les leçons",
+    "teacherLabel": "Enseignant"
+  },
+  "studentTimetable": {
+  "titles": {
+    "timetable": "Emploi du temps"
+  },
+  "days": {
+    "all": "Tous les jours",
+    "monday": "Lundi",
+    "tuesday": "Mardi",
+    "wednesday": "Mercredi",
+    "thursday": "Jeudi",
+    "friday": "Vendredi",
+    "saturday": "Samedi",
+    "sunday": "Dimanche"
+  },
+  "labels": {
+    "teacher": "Professeur",
+    "day": "Jour",
+    "selectedDay": "Jour sélectionné"
+  },
+  "placeholders": {
+    "notSpecified": "Non spécifié"
+  },
+  "messages": {
+    "loading": "Chargement...",
+    "noClasses": "Aucun cours pour ce jour",
+    "loginRequired": "Veuillez vous connecter pour voir l'emploi du temps"
+  },
+  "errors": {
+    "fetchSchedule": "Échec du chargement de l'emploi du temps"
+  }
+},
+"studentWaiting": {
+  "labels": {
+    "logoAlt": "Logo Excellence School",
+    "schoolName": "Excellence School",
+    "schoolSubtitle": "École Excellence Privée",
+    "nextStepsTitle": "Prochaines étapes:",
+    "yourInfo": "Vos informations :",
+    "email": "Email",
+    "password": "Mot de passe",
+    "level": "Niveau scolaire",
+    "status": "Statut",
+    "pendingApproval": "En attente d'approbation",
+    "nextSteps": {
+      "adminReview": "Notre administration vérifiera vos matières et assignera les enseignants",
+      "dashboardAccess": "Vous aurez accès à votre tableau de bord une fois approuvé",
+      "autoRefresh": "Cette page se rafraîchira automatiquement une fois que vous serez accepté"
+    }
+  },
+  "titles": {
+    "underReview": "Votre demande est en cours de révision"
+  },
+  "messages": {
+    "welcome": "Bienvenue ! Votre inscription a été soumise avec succès et est actuellement en cours de révision par notre équipe administrative.",
+    "pending": "Votre demande est toujours en cours de révision. Veuillez attendre l'approbation.",
+    "autoRefreshInfo": "Cette page vérifie automatiquement votre statut toutes les 30 secondes."
+  },
+  "buttons": {
+    "checkStatus": "Vérifier le statut maintenant",
+    "checking": "Vérification en cours...",
+    "logout": "Se déconnecter"
+  },
+  "errors": {
+    "checkStatus": "Erreur lors de la vérification de l'état d'acceptation",
+    "tryLater": "Erreur lors de la vérification de votre statut. Veuillez réessayer plus tard."
+  }
+}
+
+
+
+}

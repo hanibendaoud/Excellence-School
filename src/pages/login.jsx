@@ -58,11 +58,11 @@ const Login = () => {
         teacher: teacher,
         id: data.user._id,
         accepter: data.accepeter || data.user.accepeter,
-        mdp:formData.password
+        mdp:formData.password,
+        fullname:`${data.user.firstname} ${data.user.lastname}`
       });
 
       if (data.msg === "student") {
-        // Check if student is accepted
         const isAccepted = data.accepeter || data.user.accepeter;
         if (isAccepted) {
           navigate("/student/home");

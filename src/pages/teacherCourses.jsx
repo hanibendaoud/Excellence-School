@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 const baseUrl = "https://excellenceschool.onrender.com";
 
 const TeacherCourses = () => {
+  const { t } = useTranslation();
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -11,7 +13,7 @@ const TeacherCourses = () => {
   // 🔹 Fetch courses
   const fetchCourses = async () => {
     if (!teacherEmail) {
-      alert("⚠️ Teacher email not found. Please log in again.");
+      alert(t("teacherCourses.errors.noEmail"));
       return;
     }
     try {
@@ -24,6 +26,7 @@ const TeacherCourses = () => {
       setCourses(Array.isArray(data) ? data.filter(Boolean) : []);
     } catch (error) {
       console.error("Error fetching courses:", error);
+      alert(t("teacherCourses.errors.load"));
     } finally {
       setLoading(false);
     }
@@ -31,7 +34,7 @@ const TeacherCourses = () => {
 
   // 🔹 Delete course
   const handleDelete = async (title) => {
-    if (!window.confirm("هل تريد حذف هذا الدرس؟")) return;
+    if (!window.confirm(t("teacherCourses.confirm.delete"))) return;
 
     try {
       const response = await fetch(`${baseUrl}/deletcourse`, {
@@ -46,15 +49,15 @@ const TeacherCourses = () => {
       });
 
       if (response.ok) {
-        alert("✅ تم حذف الدرس بنجاح");
+        alert(t("teacherCourses.success.deleted"));
         fetchCourses(); // refresh list
       } else {
         const errText = await response.text();
-        alert("❌ فشل حذف الدرس: " + errText);
+        alert(t("teacherCourses.errors.failed") + ": " + errText);
       }
     } catch (error) {
       console.error("Error deleting course:", error);
-      alert("❌ خطأ أثناء حذف الدرس");
+      alert(t("teacherCourses.errors.network"));
     }
   };
 
@@ -64,12 +67,12 @@ const TeacherCourses = () => {
 
   return (
     <div className="bg-white shadow-lg rounded-2xl p-6">
-      <h2 className="text-lg font-bold mb-4">الدروس المضافة</h2>
+      <h2 className="text-lg font-bold mb-4">{t("teacherCourses.title")}</h2>
 
-      {loading && <p>⏳ جارٍ تحميل الدروس...</p>}
+      {loading && <p>{t("teacherCourses.loading")}</p>}
 
       {!loading && courses.length === 0 && (
-        <p className="text-gray-500">لا توجد دروس حاليا</p>
+        <p className="text-gray-500">{t("teacherCourses.noCourses")}</p>
       )}
 
       {courses.map((course) => (
@@ -87,7 +90,7 @@ const TeacherCourses = () => {
             onClick={() => handleDelete(course.title)}
             className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
           >
-            حذف
+            {t("teacherCourses.actions.delete")}
           </button>
         </div>
       ))}

@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEnvelope, FaLock, FaPhone } from "react-icons/fa";
 import wave from "../assets/wave.svg";
 import logo from "../assets/logo.svg";
+import { OptionsContext } from "../Context/optionsContext";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -10,6 +11,7 @@ export default function Register() {
   // Controls whether we are in signup or confirmation step
   const [success, setSuccess] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
+  const { levels, subjects } = useContext(OptionsContext);
 
   // Form data
   const [formData, setFormData] = useState({
@@ -24,39 +26,10 @@ export default function Register() {
     code: "",
   });
 
-  // Dynamic data
-  const [levels, setLevels] = useState([]);
-  const [subjects, setSubjects] = useState([]);
 
   const [error, setError] = useState("");
 
-  // Fetch levels & subjects
-  useEffect(() => {
-    const fetchOptions = async () => {
-      try {
-        const [levelsRes, subjectsRes] = await Promise.all([
-          fetch("https://excellenceschool.onrender.com/getlevels"),
-          fetch("https://excellenceschool.onrender.com/getmaterials"),
-        ]);
 
-        const levelsData = await levelsRes.json();
-        const subjectsData = await subjectsRes.json();
-
-        console.log("Levels API data:", levelsData);
-        console.log("Subjects API data:", subjectsData);
-
-        // Remove nulls
-        setLevels(Array.isArray(levelsData) ? levelsData.filter(Boolean) : []);
-        setSubjects(
-          Array.isArray(subjectsData) ? subjectsData.filter(Boolean) : []
-        );
-      } catch (err) {
-        console.error("Error fetching options:", err);
-      }
-    };
-
-    fetchOptions();
-  }, []);
 
   // Handle change
   const handleChange = (e) => {
@@ -78,19 +51,10 @@ export default function Register() {
     e.preventDefault();
 
     // Regex
-    const nameRegex = /^[A-Za-z]{2,}$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneRegex = /^[0][0-9]{9}$/;
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^])[A-Za-z\d@$!%*?&#^]{8,}$/;
 
-    // Validation
-    if (!nameRegex.test(formData.firstName)) {
-      return setError("First name must be at least 2 letters.");
-    }
-    if (!nameRegex.test(formData.lastName)) {
-      return setError("Last name must be at least 2 letters.");
-    }
+
     if (!emailRegex.test(formData.email)) {
       return setError("Please enter a valid email address.");
     }
@@ -102,11 +66,6 @@ export default function Register() {
     }
     if (!formData.subjects.length) {
       return setError("Please select at least one subject.");
-    }
-    if (!passwordRegex.test(formData.password)) {
-      return setError(
-        "Password must have 8+ chars, uppercase, lowercase, number, special char."
-      );
     }
     if (formData.password !== formData.confirmPassword) {
       return setError("Passwords do not match!");
@@ -306,88 +265,88 @@ export default function Register() {
 
           {/* Right */}
           <div className="md:w-1/2 w-full">
-            <h2 className="text-xl font-semibold text-[#FF5722] mb-4">
-              Let’s get started
-            </h2>
+  <h2 className="text-lg font-semibold text-[#FF5722] mb-3">
+    Let’s get started
+  </h2>
 
-            {error && (
-              <div className="mb-4 p-3 bg-red-100 border text-red-600 rounded-md text-sm">
-                {error}
-              </div>
-            )}
+  {error && (
+    <div className="mb-3 p-2 bg-red-100 border text-red-600 rounded-md text-sm">
+      {error}
+    </div>
+  )}
 
-            <form className="space-y-3" onSubmit={handleRegisterSubmit}>
-              {/* Names */}
-              <div className="grid grid-cols-2 gap-3">
-                <input
-                autoComplete="off"
-                  type="text"
-                  name="firstName"
-                  placeholder="First Name"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  className="w-full border p-2.5 rounded-md"
-                />
-                <input
-                autoComplete="off"
-                  type="text"
-                  name="lastName"
-                  placeholder="Last Name"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  className="w-full border p-2.5 rounded-md"
-                />
-              </div>
+  <form className="space-y-2.5" onSubmit={handleRegisterSubmit}>
+    {/* Names */}
+    <div className="grid grid-cols-2 gap-2.5">
+      <input
+        autoComplete="off"
+        type="text"
+        name="firstName"
+        placeholder="First Name"
+        value={formData.firstName}
+        onChange={handleChange}
+        className="w-full border p-2 rounded-md text-sm"
+      />
+      <input
+        autoComplete="off"
+        type="text"
+        name="lastName"
+        placeholder="Last Name"
+        value={formData.lastName}
+        onChange={handleChange}
+        className="w-full border p-2 rounded-md text-sm"
+      />
+    </div>
 
-              {/* Email */}
-              <div className="relative">
-                <FaEnvelope className="absolute right-3 top-3.5 text-gray-400" />
-                <input
-                autoComplete="off"
-                  type="email"
-                  name="email"
-                  placeholder="Email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full border p-2.5 rounded-md pr-8"
-                />
-              </div>
+    {/* Email */}
+    <div className="relative">
+      <FaEnvelope className="absolute right-2.5 top-3 text-gray-400 text-sm" />
+      <input
+        autoComplete="off"
+        type="email"
+        name="email"
+        placeholder="Email"
+        value={formData.email}
+        onChange={handleChange}
+        className="w-full border p-2 rounded-md pr-8 text-sm"
+      />
+    </div>
 
-              {/* Phone */}
-              <div className="relative">
-                <FaPhone className="absolute right-3 top-3.5 text-gray-400" />
-                <input
-                autoComplete="off"
-                  type="text"
-                  name="phone"
-                  placeholder="Phone Number"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className="w-full border p-2.5 rounded-md pr-8"
-                />
-              </div>
+    {/* Phone */}
+    <div className="relative">
+      <FaPhone className="absolute right-2.5 top-3 text-gray-400 text-sm" />
+      <input
+        autoComplete="off"
+        type="text"
+        name="phone"
+        placeholder="Phone Number"
+        value={formData.phone}
+        onChange={handleChange}
+        className="w-full border p-2 rounded-md pr-8 text-sm"
+      />
+    </div>
 
-              {/* Academic Level */}
-              <select
-                name="academicLevel"
-                value={formData.academicLevel}
-                onChange={handleChange}
-                className="w-full border p-2.5 rounded-md"
-              >
-                <option value="">Select Academic Level</option>
-                {levels.map((l, idx) => (
-                  <option key={idx} value={l}>
-                    {l}
-                  </option>
-                ))}
-              </select>
+    {/* Academic Level */}
+    <select
+      name="academicLevel"
+      value={formData.academicLevel}
+      onChange={handleChange}
+      className="w-full border p-2 rounded-md text-sm"
+    >
+      <option value="">Select Academic Level</option>
+      {levels.map((l, idx) => (
+        <option key={idx} value={l}>
+          {l}
+        </option>
+      ))}
+    </select>
 
-              {/* Subjects (multi) */}
-              <div>
-  <p className="mb-2 font-medium">Select Subjects:</p>
-  <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto border rounded-md p-2">
+    {/* Subjects */}
+    <div>
+  <p className="mb-1.5 font-medium text-sm">Select Subjects:</p>
+  <div className="grid grid-cols-2 gap-1.5 max-h-32 overflow-y-auto border rounded-md p-1.5 text-sm">
     {subjects.map((s, idx) => (
-      <label key={idx} className="flex items-center gap-2">
+      <label key={idx} className="flex items-center gap-1.5">
         <input
           type="checkbox"
           value={s}
@@ -405,7 +364,7 @@ export default function Register() {
               });
             }
           }}
-          className="w-4 h-4"
+          className="w-3.5 h-3.5"
         />
         {s}
       </label>
@@ -413,60 +372,60 @@ export default function Register() {
   </div>
 </div>
 
-              {/* Passwords */}
-              <div className="relative">
-                <FaLock className="absolute right-3 top-3.5 text-gray-400" />
-                <input
-                  
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className="w-full border p-2.5 rounded-md"
-                />
-              </div>
-              <div className="relative">
-                <FaLock className="absolute right-3 top-3.5 text-gray-400" />
-                <input
-                  type="password"
-                  name="confirmPassword"
-                  placeholder="Confirm Password"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  className="w-full border p-2.5 rounded-md"
-                />
-              </div>
+    {/* Passwords */}
+    <div className="relative">
+      <FaLock className="absolute right-2.5 top-3 text-gray-400 text-sm" />
+      <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        value={formData.password}
+        onChange={handleChange}
+        className="w-full border p-2 rounded-md text-sm"
+      />
+    </div>
+    <div className="relative">
+      <FaLock className="absolute right-2.5 top-3 text-gray-400 text-sm" />
+      <input
+        type="password"
+        name="confirmPassword"
+        placeholder="Confirm Password"
+        value={formData.confirmPassword}
+        onChange={handleChange}
+        className="w-full border p-2 rounded-md text-sm"
+      />
+    </div>
 
-              {/* Login link */}
-              <p className="text-center text-xs text-gray-500">
-                Already have an account?{" "}
-                <span
-                  className="text-orange-500 cursor-pointer"
-                  onClick={() => navigate("/login")}
-                >
-                  Log in
-                </span>
-              </p>
+    {/* Login link */}
+    <p className="text-center text-xs text-gray-500">
+      Already have an account?{" "}
+      <span
+        className="text-orange-500 cursor-pointer"
+        onClick={() => navigate("/login")}
+      >
+        Log in
+      </span>
+    </p>
 
-              {/* Buttons */}
-              <div className="flex gap-3">
-                <button
-                  type="button"
-                  className="w-1/2 border py-2.5 rounded-md hover:bg-gray-100"
-                  onClick={() => navigate("/")}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="w-1/2 bg-gradient-to-r from-orange-400 to-orange-500 py-2.5 rounded-md text-white font-medium hover:opacity-90"
-                >
-                  Sign up
-                </button>
-              </div>
-            </form>
-          </div>
+    {/* Buttons */}
+    <div className="flex gap-2.5">
+      <button
+        type="button"
+        className="w-1/2 border py-2 rounded-md hover:bg-gray-100 text-sm"
+        onClick={() => navigate("/")}
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        className="w-1/2 bg-gradient-to-r from-orange-400 to-orange-500 py-2 rounded-md text-white font-medium text-sm hover:opacity-90"
+      >
+        Sign up
+      </button>
+    </div>
+  </form>
+</div>
+
         </div>
       )}
     </div>

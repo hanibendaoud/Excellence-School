@@ -1,27 +1,34 @@
 import { Outlet, NavLink } from "react-router-dom";
-import { Bell, User, LogOut, Home, Calendar, BookOpen,MessageCircle } from "lucide-react";
+import { Bell, User, LogOut, Home, Calendar, BookOpen, MessageCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import useAuth from "../hooks/useAuth";
-import logo from '../assets/logo.svg';
+import logo from "../assets/logo.svg";
 
 const StudentDashboard = () => {
-  const { logout } = useAuth();
+  const { t, i18n } = useTranslation();
+  const { logout, auth } = useAuth();
 
   const navItems = [
-    { to: "home", label: "Home", icon: Home },
-    { to: "timetable", label: "Timetable", icon: Calendar },
-    { to: "lessons", label: "Lessons", icon: BookOpen },
-    { to: "discussion", label: "Discussion", icon: MessageCircle }
+    { to: "home", label: t("studentDashboard.nav.home"), icon: Home },
+    { to: "timetable", label: t("studentDashboard.nav.timetable"), icon: Calendar },
+    { to: "lessons", label: t("studentDashboard.nav.lessons"), icon: BookOpen },
+    { to: "discussion", label: t("studentDashboard.nav.discussion"), icon: MessageCircle },
   ];
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
 
   return (
     <div className="flex h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      {/* Sidebar */}
       <aside className="w-64 bg-white shadow-lg flex flex-col border-r border-gray-200">
         <div className="p-6 border-b border-gray-100">
           <div className="flex flex-col items-center gap-3">
             <img src={logo} alt="Excellence School" className="w-20 h-20" />
             <div>
               <h1 className="font-bold text-lg text-gray-800">Excellence School</h1>
-              <p className="text-xs text-gray-500 font-medium">Student Portal</p>
+              <p className="text-xs text-gray-500 font-medium">{t("studentDashboard.portal")}</p>
             </div>
           </div>
         </div>
@@ -47,6 +54,19 @@ const StudentDashboard = () => {
           </div>
         </nav>
 
+        {/* Language Selector */}
+        <div className="px-4 py-3 border-t border-gray-100">
+          <select
+            onChange={(e) => changeLanguage(e.target.value)}
+            defaultValue={i18n.language}
+            className="w-full border rounded-lg px-3 py-2 text-sm"
+          >
+            <option value="en">English</option>
+            <option value="fr">Français</option>
+            <option value="ar">العربية</option>
+          </select>
+        </div>
+
         {/* Logout Button */}
         <div className="p-4 border-t border-gray-100">
           <button
@@ -54,7 +74,7 @@ const StudentDashboard = () => {
             className="group flex items-center gap-3 px-4 py-3 rounded-xl w-full text-left text-gray-600 hover:bg-red-50 hover:text-red-600 transition-all duration-200"
           >
             <LogOut className="w-5 h-5" />
-            <span className="font-medium">Log Out</span>
+            <span className="font-medium">{t("studentDashboard.logout")}</span>
           </button>
         </div>
       </aside>
@@ -66,8 +86,10 @@ const StudentDashboard = () => {
           <div className="h-full flex items-center justify-between px-6">
             {/* Welcome Message */}
             <div className="hidden md:block">
-              <h2 className="text-lg font-semibold text-gray-800">مرحباً بك في لوحة التحكم</h2>
-              <p className="text-sm text-gray-500">إدارة دروسك وجدولك الزمني</p>
+              <h2 className="text-lg font-semibold text-gray-800">
+                {t("studentDashboard.welcome")}
+              </h2>
+              <p className="text-sm text-gray-500">{t("studentDashboard.manage")}</p>
             </div>
 
             {/* Header Actions */}
@@ -84,8 +106,12 @@ const StudentDashboard = () => {
                   <User className="w-4 h-4 text-white" />
                 </div>
                 <div className="text-right">
-                  <p className="font-semibold text-gray-800 text-sm">محمد</p>
-                  <p className="text-xs text-gray-500">سنة 2 ثانوي</p>
+                  <p className="font-semibold text-gray-800 text-sm">
+                    {auth.fullname || t("studentDashboard.unknown")}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {auth.level || t("studentDashboard.noLevel")}
+                  </p>
                 </div>
               </div>
             </div>

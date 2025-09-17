@@ -3,6 +3,7 @@ import {
   Settings, Plus, UserPlus, BookOpen, Clock, School, 
   AlertCircle, CheckCircle, Trash2 
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const baseUrl = "https://excellenceschool.onrender.com";
 
@@ -53,6 +54,8 @@ const CardWrapper = memo(({ title, icon: Icon, children }) => (
 ));
 
 const ItemsList = memo(({ items, type, onDelete }) => {
+  const { t } = useTranslation();
+  
   if (!items || items.length === 0) return null;
 
   const getLabel = (item) => {
@@ -68,14 +71,14 @@ const ItemsList = memo(({ items, type, onDelete }) => {
 
   return (
     <div className="mt-4 space-y-2 max-h-40 overflow-y-auto">
-      <h4 className="text-sm font-medium text-gray-700 mb-2">Current Items:</h4>
+      <h4 className="text-sm font-medium text-gray-700 mb-2">{t("adminSettings.existing")}:</h4>
       {items.map((item, index) => (
         <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
           <span className="text-sm text-gray-700">{getLabel(item)}</span>
           <button
             onClick={() => onDelete && onDelete(item)}
             className="text-red-500 hover:text-red-700 p-1 rounded transition-colors"
-            title="Delete item"
+            title={t("adminSettings.delete")}
           >
             <Trash2 className="w-4 h-4" />
           </button>
@@ -86,6 +89,7 @@ const ItemsList = memo(({ items, type, onDelete }) => {
 });
 
 const LevelCard = memo(({ onUpdate }) => {
+  const { t } = useTranslation();
   const [value, setValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
@@ -112,7 +116,7 @@ const LevelCard = memo(({ onUpdate }) => {
 
   const handleSubmit = async () => {
     if (!value.trim()) {
-      showMessage("Please fill in the field", "error");
+      showMessage(t("adminSettings.errors.fillField"), "error");
       return;
     }
 
@@ -125,16 +129,16 @@ const LevelCard = memo(({ onUpdate }) => {
       });
 
       if (response.ok) {
-        showMessage("Academic level added successfully!");
+        showMessage(t("adminSettings.success.levelAdded"));
         setValue("");
         fetchItems();
         if (onUpdate) onUpdate();
       } else {
         const errorData = await response.json().catch(() => ({}));
-        showMessage(errorData.message || "Operation failed", "error");
+        showMessage(errorData.message || t("adminSettings.errors.operationFailed"), "error");
       }
     } catch {
-      showMessage("Network error occurred", "error");
+      showMessage(t("adminSettings.errors.network"), "error");
     } finally {
       setLoading(false);
     }
@@ -158,37 +162,36 @@ const LevelCard = memo(({ onUpdate }) => {
     console.log("Delete level response data:", data);
 
     if (response.ok) {
-      showMessage("Level deleted successfully!");
+      showMessage(t("adminSettings.success.levelAdded"));
       fetchItems();
       if (onUpdate) onUpdate();
     } else {
-      showMessage(data.message || "Delete failed", "error");
+      showMessage(data.message || t("adminSettings.errors.operationFailed"), "error");
     }
   } catch (error) {
     console.error("Delete level error:", error);
-    showMessage("Network error occurred", "error");
+    showMessage(t("adminSettings.errors.network"), "error");
   }
 };
 
-
   return (
-    <CardWrapper title="Academic Levels" icon={BookOpen}>
+    <CardWrapper title={t("adminSettings.levels.title")} icon={BookOpen}>
       <MessageAlert message={message} />
       <div className="space-y-4">
         <input
           type="text"
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          placeholder="e.g., Primary, Secondary, Grade 9..."
+          placeholder={t("adminSettings.levels.placeholder")}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400"
         />
         <SubmitButton 
           loading={loading} 
-          loadingText="Adding Level..." 
+          loadingText={t("adminSettings.levels.loading")} 
           icon={Plus}
           onClick={handleSubmit}
         >
-          Add Academic Level
+          {t("adminSettings.levels.add")}
         </SubmitButton>
       </div>
       <ItemsList items={items} type="levels" onDelete={handleDelete} />
@@ -197,6 +200,7 @@ const LevelCard = memo(({ onUpdate }) => {
 });
 
 const ClassroomCard = memo(({ onUpdate }) => {
+  const { t } = useTranslation();
   const [value, setValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
@@ -223,7 +227,7 @@ const ClassroomCard = memo(({ onUpdate }) => {
 
   const handleSubmit = async () => {
     if (!value.trim()) {
-      showMessage("Please fill in the field", "error");
+      showMessage(t("adminSettings.errors.fillField"), "error");
       return;
     }
 
@@ -236,16 +240,16 @@ const ClassroomCard = memo(({ onUpdate }) => {
       });
 
       if (response.ok) {
-        showMessage("Classroom added successfully!");
+        showMessage(t("adminSettings.success.classroomAdded"));
         setValue("");
         fetchItems();
         if (onUpdate) onUpdate();
       } else {
         const errorData = await response.json().catch(() => ({}));
-        showMessage(errorData.message || "Operation failed", "error");
+        showMessage(errorData.message || t("adminSettings.errors.operationFailed"), "error");
       }
     } catch {
-      showMessage("Network error occurred", "error");
+      showMessage(t("adminSettings.errors.network"), "error");
     } finally {
       setLoading(false);
     }
@@ -269,7 +273,7 @@ const handleDelete = async (item) => {
     console.log("Delete classroom response data:", data);
 
     if (response.ok) {
-      showMessage("Classroom deleted successfully!");
+      showMessage(t("adminSettings.success.classroomAdded"));
 
       await fetchItems();
       const checkResponse = await fetch(`${baseUrl}/getclassroom`);
@@ -278,34 +282,32 @@ const handleDelete = async (item) => {
 
       if (onUpdate) onUpdate();
     } else {
-      showMessage(data.message || "Delete failed", "error");
+      showMessage(data.message || t("adminSettings.errors.operationFailed"), "error");
     }
   } catch (error) {
     console.error("Delete classroom error:", error);
-    showMessage("Network error occurred", "error");
+    showMessage(t("adminSettings.errors.network"), "error");
   }
 };
 
-
-
   return (
-    <CardWrapper title="Classrooms" icon={School}>
+    <CardWrapper title={t("adminSettings.classrooms.title")} icon={School}>
       <MessageAlert message={message} />
       <div className="space-y-4">
         <input
           type="text"
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          placeholder="e.g., Room A1, Computer Lab..."
+          placeholder={t("adminSettings.classrooms.placeholder")}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400"
         />
         <SubmitButton 
           loading={loading} 
-          loadingText="Adding Classroom..." 
+          loadingText={t("adminSettings.classrooms.loading")} 
           icon={Plus}
           onClick={handleSubmit}
         >
-          Add Classroom
+          {t("adminSettings.classrooms.add")}
         </SubmitButton>
       </div>
       <ItemsList items={items} type="classrooms" onDelete={handleDelete} />
@@ -314,6 +316,7 @@ const handleDelete = async (item) => {
 });
 
 const TimingCard = memo(({ onUpdate }) => {
+  const { t } = useTranslation();
   const [value, setValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
@@ -340,7 +343,7 @@ const TimingCard = memo(({ onUpdate }) => {
 
   const handleSubmit = async () => {
     if (!value.trim()) {
-      showMessage("Please fill in the field", "error");
+      showMessage(t("adminSettings.errors.fillField"), "error");
       return;
     }
 
@@ -353,16 +356,16 @@ const TimingCard = memo(({ onUpdate }) => {
       });
 
       if (response.ok) {
-        showMessage("Time slot added successfully!");
+        showMessage(t("adminSettings.success.timingAdded"));
         setValue("");
         fetchItems();
         if (onUpdate) onUpdate();
       } else {
         const errorData = await response.json().catch(() => ({}));
-        showMessage(errorData.message || "Operation failed", "error");
+        showMessage(errorData.message || t("adminSettings.errors.operationFailed"), "error");
       }
     } catch {
-      showMessage("Network error occurred", "error");
+      showMessage(t("adminSettings.errors.network"), "error");
     } finally {
       setLoading(false);
     }
@@ -386,37 +389,36 @@ const TimingCard = memo(({ onUpdate }) => {
     console.log("Delete timing response data:", data);
 
     if (response.ok) {
-      showMessage("Time slot deleted successfully!");
+      showMessage(t("adminSettings.success.timingAdded"));
       fetchItems();
       if (onUpdate) onUpdate();
     } else {
-      showMessage(data.message || "Delete failed", "error");
+      showMessage(data.message || t("adminSettings.errors.operationFailed"), "error");
     }
   } catch (error) {
     console.error("Delete timing error:", error);
-    showMessage("Network error occurred", "error");
+    showMessage(t("adminSettings.errors.network"), "error");
   }
 };
 
-
   return (
-    <CardWrapper title="Time Slots" icon={Clock}>
+    <CardWrapper title={t("adminSettings.timings.title")} icon={Clock}>
       <MessageAlert message={message} />
       <div className="space-y-4">
         <input
           type="text"
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          placeholder="e.g., 08:00 AM - 09:30 AM..."
+          placeholder={t("adminSettings.timings.placeholder")}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400"
         />
         <SubmitButton 
           loading={loading} 
-          loadingText="Adding Time Slot..." 
+          loadingText={t("adminSettings.timings.loading")} 
           icon={Plus}
           onClick={handleSubmit}
         >
-          Add Time Slot
+          {t("adminSettings.timings.add")}
         </SubmitButton>
       </div>
       <ItemsList items={items} type="timings" onDelete={handleDelete} />
@@ -425,6 +427,7 @@ const TimingCard = memo(({ onUpdate }) => {
 });
 
 const MaterialCard = memo(({ onUpdate }) => {
+  const { t } = useTranslation();
   const [value, setValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
@@ -451,7 +454,7 @@ const MaterialCard = memo(({ onUpdate }) => {
 
   const handleSubmit = async () => {
     if (!value.trim()) {
-      showMessage("Please fill in the field", "error");
+      showMessage(t("adminSettings.errors.fillField"), "error");
       return;
     }
 
@@ -464,16 +467,16 @@ const MaterialCard = memo(({ onUpdate }) => {
       });
 
       if (response.ok) {
-        showMessage("Subject added successfully!");
+        showMessage(t("adminSettings.success.materialAdded"));
         setValue("");
         fetchItems();
         if (onUpdate) onUpdate();
       } else {
         const errorData = await response.json().catch(() => ({}));
-        showMessage(errorData.message || "Operation failed", "error");
+        showMessage(errorData.message || t("adminSettings.errors.operationFailed"), "error");
       }
     } catch {
-      showMessage("Network error occurred", "error");
+      showMessage(t("adminSettings.errors.network"), "error");
     } finally {
       setLoading(false);
     }
@@ -497,37 +500,36 @@ const MaterialCard = memo(({ onUpdate }) => {
     console.log("Delete material response data:", data);
 
     if (response.ok) {
-      showMessage("Subject deleted successfully!");
+      showMessage(t("adminSettings.success.materialAdded"));
       fetchItems();
       if (onUpdate) onUpdate();
     } else {
-      showMessage(data.message || "Delete failed", "error");
+      showMessage(data.message || t("adminSettings.errors.operationFailed"), "error");
     }
   } catch (error) {
     console.error("Delete material error:", error);
-    showMessage("Network error occurred", "error");
+    showMessage(t("adminSettings.errors.network"), "error");
   }
 };
 
-
   return (
-    <CardWrapper title="Subjects & Materials" icon={BookOpen}>
+    <CardWrapper title={t("adminSettings.materials.title")} icon={BookOpen}>
       <MessageAlert message={message} />
       <div className="space-y-4">
         <input
           type="text"
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          placeholder="e.g., Mathematics, Physics..."
+          placeholder={t("adminSettings.materials.placeholder")}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400"
         />
         <SubmitButton 
           loading={loading} 
-          loadingText="Adding Subject..." 
+          loadingText={t("adminSettings.materials.loading")} 
           icon={Plus}
           onClick={handleSubmit}
         >
-          Add Subject/Material
+          {t("adminSettings.materials.add")}
         </SubmitButton>
       </div>
       <ItemsList items={items} type="materials" onDelete={handleDelete} />
@@ -536,6 +538,7 @@ const MaterialCard = memo(({ onUpdate }) => {
 });
 
 const AdminCard = memo(({ onUpdate }) => {
+  const { t } = useTranslation();
   const [fullname, setFullname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -549,7 +552,7 @@ const AdminCard = memo(({ onUpdate }) => {
 
   const handleSubmit = async () => {
     if (!fullname.trim() || !email.trim() || !password.trim()) {
-      showMessage("Please fill in all fields", "error");
+      showMessage(t("adminSettings.errors.fillField"), "error");
       return;
     }
 
@@ -562,17 +565,17 @@ const AdminCard = memo(({ onUpdate }) => {
       });
 
       if (response.ok) {
-        showMessage("Admin created successfully!");
+        showMessage(t("adminSettings.success.adminCreated"));
         setFullname("");
         setEmail("");
         setPassword("");
         if (onUpdate) onUpdate();
       } else {
         const errorData = await response.json().catch(() => ({}));
-        showMessage(errorData.message || "Operation failed", "error");
+        showMessage(errorData.message || t("adminSettings.errors.operationFailed"), "error");
       }
     } catch {
-      showMessage("Network error occurred", "error");
+      showMessage(t("adminSettings.errors.network"), "error");
     } finally {
       setLoading(false);
     }
@@ -584,7 +587,7 @@ const AdminCard = memo(({ onUpdate }) => {
         <div className="p-2.5 bg-gradient-to-r from-orange-400 to-yellow-400 rounded-xl text-white shadow-lg">
           <UserPlus className="w-5 h-5" />
         </div>
-        <h3 className="text-lg font-semibold text-gray-800">Admin Management</h3>
+        <h3 className="text-lg font-semibold text-gray-800">{t("adminSettings.admin.title")}</h3>
       </div>
       <MessageAlert message={message} />
       <div className="space-y-6">
@@ -593,14 +596,14 @@ const AdminCard = memo(({ onUpdate }) => {
             type="text"
             value={fullname}
             onChange={(e) => setFullname(e.target.value)}
-            placeholder="Enter full name"
+            placeholder={t("adminSettings.admin.fullname")}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400"
           />
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter email address"
+            placeholder={t("adminSettings.admin.email")}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400"
           />
         </div>
@@ -608,16 +611,16 @@ const AdminCard = memo(({ onUpdate }) => {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Create a secure password"
+          placeholder={t("adminSettings.admin.password")}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400"
         />
         <SubmitButton 
           loading={loading} 
-          loadingText="Creating Admin Account..." 
+          loadingText={t("adminSettings.admin.loading")} 
           icon={UserPlus}
           onClick={handleSubmit}
         >
-          Create Administrator Account
+          {t("adminSettings.admin.create")}
         </SubmitButton>
       </div>
     </div>
@@ -635,14 +638,12 @@ const AdminSettings = () => {
 
   return (
     <div className="space-y-8">
-
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <LevelCard onUpdate={handleUpdate} />
         <ClassroomCard onUpdate={handleUpdate} />
         <TimingCard onUpdate={handleUpdate} />
         <MaterialCard onUpdate={handleUpdate} />
       </div>
-
     </div>
   );
 };

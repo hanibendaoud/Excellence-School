@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MessageCircle, User, Clock, Users } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import useAuth from '../hooks/useAuth';
 
 const StudentDiscussion = () => {
@@ -12,6 +13,7 @@ const StudentDiscussion = () => {
   const [messagesLoading, setMessagesLoading] = useState(false);
   const messagesEndRef = useRef(null);
   const { auth } = useAuth();
+  const { t } = useTranslation();
 
   // Scroll to bottom on new messages
   useEffect(() => {
@@ -31,9 +33,7 @@ const StudentDiscussion = () => {
         const res = await fetch(`https://excellenceschool.onrender.com/getsubjects/${auth.id}`);
         const data = await res.json();
         setSubjects(data || []);
-        console.log('Available teachers:', data);
-      } catch (err) {
-        console.error('Error fetching subjects:', err);
+      } catch {
         setSubjects([]);
       } finally {
         setLoading(false);
@@ -54,22 +54,17 @@ const StudentDiscussion = () => {
         setSocket(newSocket);
 
         newSocket.on('connect', () => {
-          console.log('✅ Connected to server');
           setIsConnected(true);
-
           if (auth?.id) {
             newSocket.emit('register', auth.id);
-            console.log('📝 Registered student with ID:', auth.id);
           }
         });
 
         newSocket.on('disconnect', () => {
-          console.log('⚠️ Disconnected from server');
           setIsConnected(false);
         });
 
         newSocket.on('message', (data) => {
-          console.log("📨 New message from server:", data);
           setMessages((prev) => [
             ...prev,
             {
@@ -84,9 +79,7 @@ const StudentDiscussion = () => {
         });
 
         return newSocket;
-      } catch (err) {
-        console.error('❌ Socket init failed:', err);
-      }
+      } catch {}
     };
 
     if (auth?.id) {
@@ -106,7 +99,6 @@ const StudentDiscussion = () => {
         `https://excellenceschool.onrender.com/getmessages?fullname=${encodeURIComponent(teacherName)}`
       );
       const data = await res.json();
-      console.log('🔥 Old messages:', data);
 
       setMessages(
         data.map((msg, idx) => ({
@@ -118,8 +110,7 @@ const StudentDiscussion = () => {
           isTeacher: true,
         }))
       );
-    } catch (err) {
-      console.error('❌ Fetch messages error:', err);
+    } catch {
       setMessages([]);
     } finally {
       setMessagesLoading(false);
@@ -161,11 +152,11 @@ const StudentDiscussion = () => {
       <div className="col-span-1 bg-white shadow rounded-xl p-4 space-y-3 overflow-y-auto max-h-[calc(100vh-8rem)]">
         <div className="flex items-center gap-2 mb-4">
           <Users className="w-5 h-5 text-orange-500" />
-          <h2 className="font-bold">الأساتذة</h2>
+          <h2 className="font-bold">{t("studentDiscussion.teachers")}</h2>
         </div>
 
         {loading ? (
-          <p className="text-gray-500">جاري التحميل...</p>
+          <p className="text-gray-500">{t("studentDiscussion.loading")}</p>
         ) : subjects.length > 0 ? (
           <div className="space-y-2">
             {subjects.map((subject) => (
@@ -186,7 +177,7 @@ const StudentDiscussion = () => {
                 <div className="flex items-center gap-1 mt-1">
                   <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-400' : 'bg-gray-400'}`}></div>
                   <span className="text-xs text-gray-400">
-                    {isConnected ? 'متصل' : 'غير متصل'}
+                    {isConnected ? t("studentDiscussion.online") : t("studentDiscussion.offline")}
                   </span>
                 </div>
               </div>
@@ -195,7 +186,7 @@ const StudentDiscussion = () => {
         ) : (
           <div className="text-center py-8">
             <MessageCircle className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500">لا توجد مواد متاحة</p>
+            <p className="text-gray-500">{t("studentDiscussion.noSubjects")}</p>
           </div>
         )}
       </div>
@@ -214,8 +205,8 @@ const StudentDiscussion = () => {
                 </>
               ) : (
                 <>
-                  <h3 className="text-lg font-semibold text-gray-800">المناقشات</h3>
-                  <p className="text-sm text-gray-500">اختر أستاذ لعرض الرسائل</p>
+                  <h3 className="text-lg font-semibold text-gray-800">{t("studentDiscussion.discussions")}</h3>
+                  <p className="text-sm text-gray-500">{t("studentDiscussion.selectTeacher")}</p>
                 </>
               )}
             </div>
@@ -223,7 +214,7 @@ const StudentDiscussion = () => {
           <div className="flex items-center gap-2">
             <div className={`w-3 h-3 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
             <span className={`text-sm font-medium ${isConnected ? 'text-green-600' : 'text-red-600'}`}>
-              {isConnected ? 'متصل' : 'منقطع'}
+              {isConnected ? t("studentDiscussion.online") : t("studentDiscussion.disconnected")}
             </span>
           </div>
         </div>
@@ -234,18 +225,18 @@ const StudentDiscussion = () => {
             <div className="flex items-center justify-center h-full">
               <div className="text-center">
                 <MessageCircle className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                <p className="text-gray-500">اختر أستاذ من القائمة لبدء المحادثة</p>
+                <p className="text-gray-500">{t("studentDiscussion.chooseTeacher")}</p>
               </div>
             </div>
           ) : messagesLoading ? (
             <div className="flex items-center justify-center h-full">
-              <p className="text-gray-500">جاري تحميل الرسائل...</p>
+              <p className="text-gray-500">{t("studentDiscussion.loadingMessages")}</p>
             </div>
           ) : messages.length === 0 ? (
             <div className="flex items-center justify-center h-full">
               <div className="text-center">
                 <MessageCircle className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                <p className="text-gray-500">لا توجد رسائل من هذا الأستاذ بعد</p>
+                <p className="text-gray-500">{t("studentDiscussion.noMessages")}</p>
               </div>
             </div>
           ) : (
@@ -268,7 +259,7 @@ const StudentDiscussion = () => {
                       <div className="flex items-center gap-2 mb-1">
                         <User className="w-3 h-3" />
                         <span className="text-xs font-medium opacity-75">
-                          {msg.fullname || selectedTeacher?.teacher || 'الأستاذ'}
+                          {msg.fullname || selectedTeacher?.teacher || t("studentDiscussion.teacher")}
                         </span>
                       </div>
                       <p className="text-sm whitespace-pre-wrap">{msg.message}</p>
@@ -288,10 +279,10 @@ const StudentDiscussion = () => {
         {/* Footer Note */}
         <div className="p-4 border-t border-gray-200 bg-gray-50 rounded-b-xl">
           <div className="flex items-center justify-center">
-            <p className="text-sm text-gray-500 text-center">📖 هذه صفحة لقراءة رسائل الأساتذة فقط</p>
+            <p className="text-sm text-gray-500 text-center">{t("studentDiscussion.readOnly")}</p>
           </div>
           {!auth?.id && (
-            <p className="text-xs text-red-500 text-center mt-2">❌ خطأ: معرف الطالب غير موجود</p>
+            <p className="text-xs text-red-500 text-center mt-2">{t("studentDiscussion.errorNoId")}</p>
           )}
         </div>
       </div>

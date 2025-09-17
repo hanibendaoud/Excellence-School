@@ -4,6 +4,7 @@ import Login from "./pages/login";
 import ResetPassword from "./pages/resetPassword";
 import { Routes, Route, Navigate } from "react-router-dom";
 
+
 import StudentDashboard from "./pages/studentDashboard";
 import StudentHome from "./pages/studentHome";
 import StudentTimetable from "./pages/studentTimeTable";
@@ -24,6 +25,7 @@ import TeacherStudents from "./pages/teacherStudents";
 import TeacherCourses from "./pages/teacherCourses";
 import TeacherDiscussion from "./pages/TeacherDiscussion";
 import TeacherLogin from "./pages/TeacherLogin";
+import ResetPasswordTeacher from "./pages/resetTeacherPassword";
 
 import RequireAuth from "./components/RequireAuth";
 import Unauthorized from "./components/unauthorized";
@@ -66,6 +68,7 @@ function App() {
       <Route path="/teacherLogin" element={<TeacherLogin />} />
       <Route path="/resetPassword" element={<ResetPassword />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
+      <Route path="/resetPasswordTeacher" element={<ResetPasswordTeacher />} />
 
       {/* Student waiting route - students who haven't been accepted yet */}
       <Route element={<RequireAuth allowedRoles={['student']} />}>

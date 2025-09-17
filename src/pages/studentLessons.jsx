@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { FileText, Youtube } from "lucide-react";
 import useAuth from "../hooks/useAuth";
+import { useTranslation } from "react-i18next";
 
 const StudentLessons = () => {
   const [subjects, setSubjects] = useState([]);
@@ -10,6 +11,7 @@ const StudentLessons = () => {
   const [loading, setLoading] = useState(true);
   const [lessonsLoading, setLessonsLoading] = useState(false);
   const { auth } = useAuth();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!auth || !auth.id) {
@@ -26,8 +28,6 @@ const StudentLessons = () => {
         if (!res.ok) throw new Error("Server error " + res.status);
         const data = await res.json();
         setSubjects(data || []);
-        console.log('all subjects')
-        console.log(data)
       } catch {
         setSubjects([]);
       } finally {
@@ -60,7 +60,6 @@ const StudentLessons = () => {
 
       const result = await response.json();
       setLessons(result || []);
-      console.log('info about each subject \n',result)
     } catch {
       setLessons([]);
     } finally {
@@ -88,10 +87,10 @@ const StudentLessons = () => {
   return (
     <div className="grid grid-cols-3 gap-6">
       <div className="col-span-1 bg-white shadow rounded-xl p-4 space-y-3">
-        <h2 className="font-bold mb-2">المواد و الأساتذة</h2>
+        <h2 className="font-bold mb-2">{t("studentLessons.subjectsAndTeachers")}</h2>
 
         {loading ? (
-          <p className="text-gray-500">جاري التحميل...</p>
+          <p className="text-gray-500">{t("studentLessons.loading")}</p>
         ) : subjects.length > 0 ? (
           subjects.map((s, i) => (
             <div
@@ -104,19 +103,21 @@ const StudentLessons = () => {
               }`}
             >
               <p className="font-semibold">{s.subject}</p>
-              <p className="text-sm text-gray-500"> {s.teacher}   : الأستاذ </p>
+              <p className="text-sm text-gray-500">
+                {t("studentLessons.teacherLabel")} : {s.teacher}
+              </p>
             </div>
           ))
         ) : (
-          <p className="text-gray-500">لا توجد مواد</p>
+          <p className="text-gray-500">{t("studentLessons.noSubjects")}</p>
         )}
       </div>
 
       <div className="col-span-2 bg-white shadow rounded-xl p-4 space-y-3">
-        <h2 className="font-bold mb-2">الدروس</h2>
+        <h2 className="font-bold mb-2">{t("studentLessons.lessons")}</h2>
 
         {lessonsLoading ? (
-          <p className="text-gray-500">جاري تحميل الدروس...</p>
+          <p className="text-gray-500">{t("studentLessons.loadingLessons")}</p>
         ) : lessons.length > 0 ? (
           lessons.map((l) => (
             <div
@@ -140,9 +141,9 @@ const StudentLessons = () => {
             </div>
           ))
         ) : subjects.length > 0 && selectedIndex >= 0 ? (
-          <p className="text-gray-500">لا توجد دروس متاحة لهذا الأستاذ</p>
+          <p className="text-gray-500">{t("studentLessons.noLessonsForTeacher")}</p>
         ) : (
-          <p className="text-gray-500">اختر مادة لعرض الدروس</p>
+          <p className="text-gray-500">{t("studentLessons.selectSubject")}</p>
         )}
       </div>
     </div>

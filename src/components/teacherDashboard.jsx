@@ -1,16 +1,23 @@
 import { Outlet, NavLink } from "react-router-dom";
 import { Users, BookOpen, FileText, LogOut, PlusCircle, MessageCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import useAuth from "../hooks/useAuth";
 import logo from '../assets/logo.svg';
 
 const TeacherDashboard = () => {
   const { logout } = useAuth();
+  const { t, i18n } = useTranslation();
+
+  const changeLanguage = (lang) => {
+    i18n.changeLanguage(lang);
+    localStorage.setItem("lang", lang);
+  };
 
   const navItems = [
-    { to: "add-course", label: "Add Course", icon: PlusCircle },
-    { to: "students", label: "Students", icon: Users },
-    { to: "courses", label: "Courses", icon: BookOpen },
-    { to: "discussion", label: "Discussion", icon: MessageCircle },
+    { to: "add-course", label: t("dashboard.add_course"), icon: PlusCircle },
+    { to: "students", label: t("dashboard.students"), icon: Users },
+    { to: "courses", label: t("dashboard.courses"), icon: BookOpen },
+    { to: "discussion", label: t("dashboard.discussion"), icon: MessageCircle },
   ];
 
   return (
@@ -56,7 +63,7 @@ const TeacherDashboard = () => {
             className="group flex items-center gap-3 px-4 py-3 rounded-xl w-full text-left text-gray-600 hover:bg-red-50 hover:text-red-600 transition-all duration-200"
           >
             <LogOut className="w-5 h-5" />
-            <span className="font-medium">Log Out</span>
+            <span className="font-medium">{t("dashboard.logout")}</span>
           </button>
         </div>
       </aside>
@@ -67,9 +74,20 @@ const TeacherDashboard = () => {
         <header className="h-16 bg-white shadow-sm border-b border-gray-200">
           <div className="h-full flex items-center justify-between px-6">
             <div className="hidden md:block">
-              <h2 className="text-lg font-semibold text-gray-800">مرحباً بك في لوحة الأستاذ</h2>
-              <p className="text-sm text-gray-500">إضافة الدروس، متابعة الطلاب، وإدارة الدورات</p>
+              <h2 className="text-lg font-semibold text-gray-800">{t("dashboard.welcome_teacher")}</h2>
+              <p className="text-sm text-gray-500">{t("dashboard.teacher_manage")}</p>
             </div>
+
+            {/* Language Selector */}
+            <select
+              onChange={(e) => changeLanguage(e.target.value)}
+              defaultValue={i18n.language}
+              className="p-2 border rounded"
+            >
+              <option value="fr">Français</option>
+              <option value="en">English</option>
+              <option value="ar">العربية</option>
+            </select>
           </div>
         </header>
 

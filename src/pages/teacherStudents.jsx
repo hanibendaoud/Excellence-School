@@ -1,17 +1,19 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 const baseUrl = "https://excellenceschool.onrender.com";
 
 const TeacherStudents = () => {
+  const { t } = useTranslation();
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const teacherEmail = localStorage.getItem("email");
 
-  // 🔹 Fetch students
+  // Fetch students
   const fetchStudents = async () => {
     if (!teacherEmail) {
-      alert("⚠️ Teacher email not found. Please log in again.");
+      alert(t("teacherStudents.errors.noEmail"));
       return;
     }
     try {
@@ -20,18 +22,15 @@ const TeacherStudents = () => {
         `${baseUrl}/getstudentt?email=${encodeURIComponent(teacherEmail)}`
       );
       const data = await response.json();
-      console.log("📌 Students response:", data);
       setStudents(Array.isArray(data) ? data.filter(Boolean) : []);
-    } catch (error) {
-      console.error("Error fetching students:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  // 🔹 Delete a student
+  // Delete a student
   const handleDelete = async (studentId) => {
-    if (!window.confirm("هل تريد حذف هذا الطالب؟")) return;
+    if (!window.confirm(t("teacherStudents.confirmDelete"))) return;
 
     try {
       const response = await fetch(`${baseUrl}/deletestudentt`, {
@@ -46,16 +45,14 @@ const TeacherStudents = () => {
       });
 
       if (response.ok) {
-        alert("✅ تم حذف الطالب بنجاح");
-        // refresh list from backend to stay in sync
-        fetchStudents();
+        alert(t("teacherStudents.successDelete"));
+        fetchStudents(); // refresh list
       } else {
         const errText = await response.text();
-        alert("❌ فشل حذف الطالب: " + errText);
+        alert(t("teacherStudents.errorDelete") + " " + errText);
       }
-    } catch (error) {
-      console.error("Error deleting student:", error);
-      alert("❌ خطأ أثناء حذف الطالب");
+    } catch {
+      alert(t("teacherStudents.errorGeneric"));
     }
   };
 
@@ -65,12 +62,14 @@ const TeacherStudents = () => {
 
   return (
     <div className="bg-white shadow-lg rounded-2xl p-6">
-      <h2 className="text-lg font-bold mb-4">قائمة الطلاب</h2>
+      <h2 className="text-lg font-bold mb-4">
+        {t("teacherStudents.title")}
+      </h2>
 
-      {loading && <p>⏳ جارٍ تحميل الطلاب...</p>}
+      {loading && <p>{t("teacherStudents.loading")}</p>}
 
       {!loading && students.length === 0 && (
-        <p className="text-gray-500">لا يوجد طلاب حاليا</p>
+        <p className="text-gray-500">{t("teacherStudents.noStudents")}</p>
       )}
 
       {students.map((student) => (
@@ -90,7 +89,7 @@ const TeacherStudents = () => {
             onClick={() => handleDelete(student._id)}
             className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
           >
-            حذف
+            {t("teacherStudents.delete")}
           </button>
         </div>
       ))}

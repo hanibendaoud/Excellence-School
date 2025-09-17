@@ -1,18 +1,26 @@
 import { Outlet, NavLink } from "react-router-dom";
-import { Users, BookOpen, FileText, UserCog, UserCheck, LogOut, Settings } from "lucide-react";import useAuth from "../hooks/useAuth";
+import { Users, BookOpen, FileText, UserCog, UserCheck, LogOut, Settings } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import useAuth from "../hooks/useAuth";
 import logo from '../assets/logo.svg';
 
 const AdminDashboard = () => {
   const { logout } = useAuth();
+  const { t, i18n } = useTranslation();
+
+  const changeLanguage = (lang) => {
+    i18n.changeLanguage(lang);
+    localStorage.setItem("lang", lang);
+  };
 
   const navItems = [
-  { to: "requests", label: "Requests", icon: UserCheck },
-  { to: "students", label: "Students", icon: Users },
-  { to: "teachers", label: "Teachers", icon: UserCog },
-  { to: "publications", label: "Publications", icon: FileText },
-  { to: "teacher-account", label: "Teacher account", icon: BookOpen },
-  { to: "settings", label: "Settings", icon: Settings }, // Add this line
-];
+    { to: "requests", label: t("dashboard.requests"), icon: UserCheck },
+    { to: "students", label: t("dashboard.students"), icon: Users },
+    { to: "teachers", label: t("dashboard.teachers"), icon: UserCog },
+    { to: "publications", label: t("dashboard.publications"), icon: FileText },
+    { to: "teacher-account", label: t("dashboard.teacher_account"), icon: BookOpen },
+    { to: "settings", label: t("dashboard.settings"), icon: Settings }
+  ];
 
   return (
     <div className="flex h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -57,7 +65,7 @@ const AdminDashboard = () => {
             className="group flex items-center gap-3 px-4 py-3 rounded-xl w-full text-left text-gray-600 hover:bg-red-50 hover:text-red-600 transition-all duration-200"
           >
             <LogOut className="w-5 h-5" />
-            <span className="font-medium">Log Out</span>
+            <span className="font-medium">{t("dashboard.logout")}</span>
           </button>
         </div>
       </aside>
@@ -68,9 +76,20 @@ const AdminDashboard = () => {
         <header className="h-16 bg-white shadow-sm border-b border-gray-200">
           <div className="h-full flex items-center justify-between px-6">
             <div className="hidden md:block">
-              <h2 className="text-lg font-semibold text-gray-800">مرحباً بك في لوحة الإدارة</h2>
-              <p className="text-sm text-gray-500">إدارة الطلبات، الطلاب، الأساتذة والمنشورات</p>
+              <h2 className="text-lg font-semibold text-gray-800">{t("dashboard.welcome_admin")}</h2>
+              <p className="text-sm text-gray-500">{t("dashboard.manage")}</p>
             </div>
+
+            {/* Language Selector */}
+            <select
+              onChange={(e) => changeLanguage(e.target.value)}
+              defaultValue={i18n.language}
+              className="p-2 border rounded"
+            >
+              <option value="fr">Français</option>
+              <option value="en">English</option>
+              <option value="ar">العربية</option>
+            </select>
           </div>
         </header>
 

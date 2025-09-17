@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { Search, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const AdminStudents = () => {
+  const { t } = useTranslation();
   const [students, setStudents] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
@@ -28,7 +30,7 @@ const AdminStudents = () => {
   const BASE_URL = "https://excellenceschool.onrender.com";
 
   // Arabic Days
-  const DAYS_AR = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
+  const DAYS_AR = ["الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
 
   // Fetch initial data
   useEffect(() => {
@@ -51,7 +53,7 @@ const AdminStudents = () => {
       setError("");
     } catch (err) {
       console.error("Error fetching students:", err);
-      setError("Failed to load students. Please try again.");
+      setError(t("adminStudents.errors.load"));
     } finally {
       setLoading(false);
     }
@@ -141,13 +143,12 @@ const AdminStudents = () => {
   // 🔹 Add Subject
   const handleAddSubject = async () => {
     if (!subjectData.subject || !subjectData.teacher || !subjectData.day || !subjectData.timing || !subjectData.classrom) {
-      alert("⚠️ Please fill in all fields before adding the subject.");
+      alert(t("adminStudents.errors.fillFields"));
       return;
     }
 
     try {
       setSubmitting(true);
-      console.log("📤 Adding subject:", { email: selectedStudentEmail, ...subjectData });
 
       const response = await fetch(`${BASE_URL}/addsubject`, {
         method: "POST",
@@ -162,11 +163,11 @@ const AdminStudents = () => {
       }
 
       await fetchStudents();
-      alert(`✅ Subject "${subjectData.subject}" added successfully for ${selectedStudentEmail}!`);
+      alert(t("adminStudents.success.subjectAdded", { subject: subjectData.subject, email: selectedStudentEmail }));
       closeSubjectModal();
     } catch (err) {
       console.error("Error adding subject:", err);
-      alert("❌ Failed to add subject. Please try again.");
+      alert(t("adminStudents.errors.addSubject"));
     } finally {
       setSubmitting(false);
     }
@@ -174,7 +175,7 @@ const AdminStudents = () => {
 
   // 🔹 Delete Student
   const handleDelete = async (email) => {
-    if (!window.confirm("Are you sure you want to delete this student?")) return;
+    if (!window.confirm(t("adminStudents.confirm.deleteStudent"))) return;
 
     try {
       const response = await fetch(`${BASE_URL}/deletestudent`, {
@@ -186,10 +187,10 @@ const AdminStudents = () => {
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
       setStudents((prev) => prev.filter((s) => s.email !== email));
-      alert("✅ Student deleted successfully");
+      alert(t("adminStudents.success.studentDeleted"));
     } catch (err) {
       console.error("Error deleting student:", err);
-      alert("❌ Failed to delete student. Please try again.");
+      alert(t("adminStudents.errors.deleteStudent"));
     }
   };
 
@@ -204,7 +205,7 @@ const AdminStudents = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="text-lg text-gray-600">Loading students...</div>
+        <div className="text-lg text-gray-600">{t("adminStudents.loading")}</div>
       </div>
     );
   }
@@ -217,7 +218,7 @@ const AdminStudents = () => {
           onClick={fetchStudents}
           className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
         >
-          Retry
+          {t("adminStudents.retry")}
         </button>
       </div>
     );
@@ -229,7 +230,7 @@ const AdminStudents = () => {
       <div className="flex items-center border rounded-lg overflow-hidden">
         <input
           type="text"
-          placeholder="Search by name or email"
+          placeholder={t("adminStudents.search.placeholder")}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="flex-1 px-3 py-2 outline-none"
@@ -242,7 +243,7 @@ const AdminStudents = () => {
       {/* Students List */}
       {filtered.length === 0 ? (
         <div className="text-center text-gray-500 py-8">
-          {search ? "No students found matching your search." : "No students available."}
+          {search ? t("adminStudents.noResults") : t("adminStudents.noStudents")}
         </div>
       ) : (
         filtered.map((student) => (
@@ -263,14 +264,14 @@ const AdminStudents = () => {
             {/* Display existing subjects */}
             {student.subjects && student.subjects.length > 0 && (
               <div className="mt-2">
-                <p className="text-sm font-medium text-gray-700 mb-1">Current Subjects:</p>
+                <p className="text-sm font-medium text-gray-700 mb-1">{t("adminStudents.subjects.current")}</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {student.subjects.map((subj, idx) => (
                     <div key={idx} className="bg-blue-50 p-2 rounded text-sm">
                       <p className="font-medium">{subj.subject}</p>
-                      <p className="text-gray-600">Teacher: {subj.teacher}</p>
+                      <p className="text-gray-600">{t("adminStudents.subjects.teacher")}: {subj.teacher}</p>
                       <p className="text-gray-600">{subj.day} - {subj.timing}</p>
-                      <p className="text-gray-600">Room: {subj.classrom}</p>
+                      <p className="text-gray-600">{t("adminStudents.subjects.room")}: {subj.classrom}</p>
                     </div>
                   ))}
                 </div>
@@ -283,13 +284,13 @@ const AdminStudents = () => {
                 onClick={() => openSubjectModal(student.email)}
                 className="px-4 py-2 bg-orange-400 text-white rounded-lg hover:bg-orange-500 transition-colors"
               >
-                Add Subject
+                {t("adminStudents.actions.addSubject")}
               </button>
               <button
                 onClick={() => handleDelete(student.email)}
                 className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
               >
-                Delete
+                {t("adminStudents.actions.delete")}
               </button>
             </div>
           </div>
@@ -301,7 +302,7 @@ const AdminStudents = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg w-full max-w-md">
             <div className="flex justify-between items-center p-4 border-b">
-              <h3 className="text-lg font-semibold">Add New Subject</h3>
+              <h3 className="text-lg font-semibold">{t("adminStudents.modal.title")}</h3>
               <button
                 onClick={closeSubjectModal}
                 className="text-gray-400 hover:text-gray-600"
@@ -318,7 +319,7 @@ const AdminStudents = () => {
                 value={subjectData.subject}
                 onChange={(e) => handleSubjectInputChange("subject", e.target.value)}
               >
-                <option value="">اختر المادة</option>
+                <option value="">{t("adminStudents.modal.select.subject")}</option>
                 {materials.map((m, i) => (
                   <option key={i} value={m}>
                     {m}
@@ -332,7 +333,7 @@ const AdminStudents = () => {
                 value={subjectData.teacher}
                 onChange={(e) => handleSubjectInputChange("teacher", e.target.value)}
               >
-                <option value="">اختر المعلم</option>
+                <option value="">{t("adminStudents.modal.select.teacher")}</option>
                 {teachers.length > 0 ? (
                   teachers.map((t) => (
                     <option key={t._id} value={t.fullname}>
@@ -340,7 +341,7 @@ const AdminStudents = () => {
                     </option>
                   ))
                 ) : (
-                  <option disabled>⚠️ لم يتم تحميل المعلمين</option>
+                  <option disabled>{t("adminStudents.errors.teachersNotLoaded")}</option>
                 )}
               </select>
 
@@ -350,7 +351,7 @@ const AdminStudents = () => {
                 value={subjectData.classrom}
                 onChange={(e) => handleSubjectInputChange("classrom", e.target.value)}
               >
-                <option value="">اختر القاعة</option>
+                <option value="">{t("adminStudents.modal.select.classroom")}</option>
                 {classrooms.map((room, i) => (
                   <option key={i} value={room}>
                     {room}
@@ -364,7 +365,7 @@ const AdminStudents = () => {
                 value={subjectData.timing}
                 onChange={(e) => handleSubjectInputChange("timing", e.target.value)}
               >
-                <option value="">اختر الوقت</option>
+                <option value="">{t("adminStudents.modal.select.timing")}</option>
                 {timings.map((t, i) => (
                   <option key={i} value={t}>
                     {t}
@@ -378,7 +379,7 @@ const AdminStudents = () => {
                 value={subjectData.day}
                 onChange={(e) => handleSubjectInputChange("day", e.target.value)}
               >
-                <option value="">اختر اليوم</option>
+                <option value="">{t("adminStudents.modal.select.day")}</option>
                 {DAYS_AR.map((d, i) => (
                   <option key={i} value={d}>
                     {d}
@@ -394,14 +395,14 @@ const AdminStudents = () => {
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 disabled={submitting}
               >
-                إلغاء
+                {t("adminStudents.modal.cancel")}
               </button>
               <button
                 onClick={handleAddSubject}
                 className="flex-1 px-4 py-2 bg-orange-400 text-white rounded-lg hover:bg-orange-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={submitting}
               >
-                {submitting ? "جاري الإضافة..." : "إضافة المادة"}
+                {submitting ? t("adminStudents.modal.loading") : t("adminStudents.modal.confirm")}
               </button>
             </div>
           </div>

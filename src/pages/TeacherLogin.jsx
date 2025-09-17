@@ -180,7 +180,7 @@ const TeacherLogin = () => {
 
             <p
               className="text-right text-sm text-gray-500 cursor-pointer hover:underline"
-              onClick={() => navigate("/resetPassword")}
+              onClick={() => navigate("/resetPasswordTeacher")}
             >
               Forgot password?
             </p>

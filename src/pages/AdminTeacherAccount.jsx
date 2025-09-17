@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 const BASE_URL = "https://excellenceschool.onrender.com";
 
 const AdminTeacherAccount = () => {
+  const { t } = useTranslation();
   const [form, setForm] = useState({
     fullName: "",
     phone: "",
@@ -34,7 +36,7 @@ const AdminTeacherAccount = () => {
 
   const handleCreate = async () => {
     if (!form.fullName || !form.phone || !form.email || !form.password || !form.specialit) {
-      alert("Please fill all fields");
+      alert(t("adminTeachers.errors.fillFields"));
       return;
     }
 
@@ -54,7 +56,7 @@ const AdminTeacherAccount = () => {
       });
 
       if (response.ok) {
-        alert(`Teacher created: ${form.fullName}`);
+        alert(t("adminTeachers.success.created", { name: form.fullName }));
         setForm({
           fullName: "",
           phone: "",
@@ -63,10 +65,10 @@ const AdminTeacherAccount = () => {
           specialit: "",
         });
       } else {
-        alert("Error creating teacher");
+        alert(t("adminTeachers.errors.create"));
       }
     } catch (error) {
-      alert("Failed to create teacher. Please try again.");
+      alert(t("adminTeachers.errors.network"));
       console.log(error);
     }
   };
@@ -79,7 +81,7 @@ const AdminTeacherAccount = () => {
           name="fullName"
           value={form.fullName}
           onChange={handleChange}
-          placeholder="الاسم كامل"
+          placeholder={t("adminTeachers.form.fullName")}
           className="p-2 border rounded-lg"
         />
         <input
@@ -87,7 +89,7 @@ const AdminTeacherAccount = () => {
           name="phone"
           value={form.phone}
           onChange={handleChange}
-          placeholder="رقم الهاتف"
+          placeholder={t("adminTeachers.form.phone")}
           className="p-2 border rounded-lg"
         />
         <input
@@ -95,7 +97,7 @@ const AdminTeacherAccount = () => {
           name="email"
           value={form.email}
           onChange={handleChange}
-          placeholder="البريد الإلكتروني"
+          placeholder={t("adminTeachers.form.email")}
           className="p-2 border rounded-lg"
         />
         <input
@@ -103,7 +105,7 @@ const AdminTeacherAccount = () => {
           name="password"
           value={form.password}
           onChange={handleChange}
-          placeholder="كلمة المرور"
+          placeholder={t("adminTeachers.form.password")}
           className="p-2 border rounded-lg"
         />
 
@@ -114,7 +116,7 @@ const AdminTeacherAccount = () => {
           onChange={handleChange}
           className="p-2 border rounded-lg"
         >
-          <option value="">اختر التخصص</option>
+          <option value="">{t("adminTeachers.form.selectSpeciality")}</option>
           {materials.map((mat, index) => (
             <option key={index} value={mat}>
               {mat}
@@ -127,7 +129,7 @@ const AdminTeacherAccount = () => {
         onClick={handleCreate}
         className="px-6 py-2 bg-orange-400 text-white rounded-lg"
       >
-        Create
+        {t("adminTeachers.actions.create")}
       </button>
     </div>
   );

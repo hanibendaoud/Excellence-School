@@ -1,18 +1,20 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const AdminPublications = () => {
+  const { t } = useTranslation();
   const [content, setContent] = useState("");
   const [file, setFile] = useState(null);
-  const [type, setType] = useState("image"); // default type
+  const [type, setType] = useState("image");
 
   const handlePublish = async () => {
-    if (!content.trim()) return alert("Publication content cannot be empty");
-    if (!file) return alert("Please attach a file");
+    if (!content.trim()) return alert(t("adminPublications.alertEmpty"));
+    if (!file) return alert(t("adminPublications.alertNoFile"));
 
     try {
       const formData = new FormData();
       formData.append("title", content);
-      formData.append("type", type); // Add type (image/video)
+      formData.append("type", type);
       formData.append("file", file);
 
       const response = await fetch("https://excellenceschool.onrender.com/addpublication", {
@@ -21,31 +23,31 @@ const AdminPublications = () => {
       });
 
       if (response.ok) {
-        alert("Publication published successfully!");
+        alert(t("adminPublications.success"));
         setContent("");
         setFile(null);
         document.getElementById("file-input").value = "";
       } else {
-        alert("Error publishing publication");
+        alert(t("adminPublications.error"));
       }
     } catch (error) {
-      alert("Failed to publish. Please try again.");
+      alert(t("adminPublications.fail"));
       console.error(error);
     }
   };
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
-
     if (!selectedFile) return;
 
-    const allowedImageTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
-    const allowedVideoTypes = ['video/mp4', 'video/webm', 'video/ogg'];
-
-    const allowedTypes = type === 'image' ? allowedImageTypes : allowedVideoTypes;
+    const allowedImageTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
+    const allowedVideoTypes = ["video/mp4", "video/webm", "video/ogg"];
+    const allowedTypes = type === "image" ? allowedImageTypes : allowedVideoTypes;
 
     if (!allowedTypes.includes(selectedFile.type)) {
-      alert(`Invalid file type. Please select a valid ${type === 'image' ? 'image' : 'video'} file.`);
+      alert(
+        t("adminPublications.invalidFile", { fileType: type === "image" ? t("adminPublications.image") : t("adminPublications.video") })
+      );
       e.target.value = "";
       return;
     }
@@ -53,7 +55,7 @@ const AdminPublications = () => {
     const maxSizeMB = 10;
     const maxSize = maxSizeMB * 1024 * 1024;
     if (selectedFile.size > maxSize) {
-      alert(`File size must be less than ${maxSizeMB}MB`);
+      alert(t("adminPublications.maxSize", { size: maxSizeMB }));
       e.target.value = "";
       return;
     }
@@ -63,9 +65,10 @@ const AdminPublications = () => {
 
   return (
     <div className="space-y-4">
-      {/* Publication Type Selector */}
       <div className="space-y-1">
-        <label htmlFor="type" className="text-sm font-medium text-gray-700">Publication Type</label>
+        <label htmlFor="type" className="text-sm font-medium text-gray-700">
+          {t("adminPublications.type")}
+        </label>
         <select
           id="type"
           value={type}
@@ -76,46 +79,38 @@ const AdminPublications = () => {
           }}
           className="w-full p-3 border rounded-lg outline-none focus:ring-2 focus:ring-orange-300"
         >
-          <option value="image">Image</option>
-          <option value="video">Video</option>
+          <option value="image">{t("adminPublications.image")}</option>
+          <option value="video">{t("adminPublications.video")}</option>
         </select>
       </div>
 
-      {/* Textarea for content */}
       <textarea
         rows="6"
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        placeholder="Write your publication..."
+        placeholder={t("adminPublications.placeholder")}
         className="w-full p-3 border rounded-lg outline-none focus:ring-2 focus:ring-orange-300"
       />
 
-      {/* File Input */}
       <input
         id="file-input"
         type="file"
-        accept={
-          type === "image"
-            ? "image/jpeg,image/jpg,image/png,image/gif,image/webp"
-            : "video/mp4,video/webm,video/ogg"
-        }
+        accept={type === "image" ? "image/*" : "video/*"}
         onChange={handleFileChange}
         className="w-full p-3 border rounded-lg outline-none focus:ring-2 focus:ring-orange-300"
       />
 
-      {/* File Info */}
       {file && (
         <div className="text-sm text-gray-600">
-          Selected file: {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
+          {t("adminPublications.selectedFile")}: {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
         </div>
       )}
 
-      {/* Publish Button */}
       <button
         onClick={handlePublish}
         className="px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-all"
       >
-        Publish
+        {t("adminPublications.publish")}
       </button>
     </div>
   );
