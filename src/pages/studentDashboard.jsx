@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { Outlet, NavLink } from "react-router-dom";
-import { Bell, User, LogOut, Home, Calendar, BookOpen, MessageCircle } from "lucide-react";
+import { Bell, User, LogOut, Home, Calendar, BookOpen, MessageCircle, Menu, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import useAuth from "../hooks/useAuth";
 import logo from "../assets/logo.svg";
@@ -7,6 +8,7 @@ import logo from "../assets/logo.svg";
 const StudentDashboard = () => {
   const { t, i18n } = useTranslation();
   const { logout, auth } = useAuth();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navItems = [
     { to: "home", label: t("studentDashboard.nav.home"), icon: Home },
@@ -19,10 +21,26 @@ const StudentDashboard = () => {
     i18n.changeLanguage(lng);
   };
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <div className="flex h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      {/* Sidebar */}
-      <aside className="w-64 bg-white shadow-lg flex flex-col border-r border-gray-200">
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+          onClick={closeMobileMenu}
+        />
+      )}
+
+      {/* Sidebar - Desktop */}
+      <aside className="hidden md:flex w-64 bg-white shadow-lg flex-col border-r border-gray-200">
         <div className="p-6 border-b border-gray-100">
           <div className="flex flex-col items-center gap-3">
             <img src={logo} alt="Excellence School" className="w-20 h-20" />
@@ -79,12 +97,92 @@ const StudentDashboard = () => {
         </div>
       </aside>
 
+      {/* Mobile Sidebar */}
+      <aside className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out md:hidden ${
+        isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+      }`}>
+        {/* Mobile Header */}
+        <div className="flex items-center justify-between p-4 border-b border-gray-100">
+          <div className="flex items-center gap-3">
+            <img src={logo} alt="Excellence School" className="w-10 h-10" />
+            <div>
+              <h1 className="font-bold text-sm text-gray-800">Excellence School</h1>
+              <p className="text-xs text-gray-500">{t("studentDashboard.portal")}</p>
+            </div>
+          </div>
+          <button
+            onClick={closeMobileMenu}
+            className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+          >
+            <X className="w-5 h-5 text-gray-600" />
+          </button>
+        </div>
+
+        {/* Mobile Navigation */}
+        <nav className="flex-1 px-4 py-6">
+          <div className="space-y-2">
+            {navItems.map(({ to, label, icon: Icon }) => (
+              <NavLink
+                key={to}
+                to={to}
+                onClick={closeMobileMenu}
+                className={({ isActive }) =>
+                  `group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+                    isActive
+                      ? "bg-gradient-to-r from-orange-400 to-yellow-400 text-white shadow-lg shadow-orange-200"
+                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-800"
+                  }`
+                }
+              >
+                <Icon className="w-5 h-5" />
+                <span className="font-medium">{label}</span>
+              </NavLink>
+            ))}
+          </div>
+        </nav>
+
+        {/* Mobile Language Selector */}
+        <div className="px-4 py-3 border-t border-gray-100">
+          <select
+            onChange={(e) => changeLanguage(e.target.value)}
+            defaultValue={i18n.language}
+            className="w-full border rounded-lg px-3 py-2 text-sm"
+          >
+            <option value="en">English</option>
+            <option value="fr">Français</option>
+            <option value="ar">العربية</option>
+          </select>
+        </div>
+
+        {/* Mobile Logout Button */}
+        <div className="p-4 border-t border-gray-100">
+          <button
+            onClick={() => {
+              logout();
+              closeMobileMenu();
+            }}
+            className="group flex items-center gap-3 px-4 py-3 rounded-xl w-full text-left text-gray-600 hover:bg-red-50 hover:text-red-600 transition-all duration-200"
+          >
+            <LogOut className="w-5 h-5" />
+            <span className="font-medium">{t("studentDashboard.logout")}</span>
+          </button>
+        </div>
+      </aside>
+
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Header */}
-        <header className="h-16 bg-white shadow-sm border-b border-gray-200">
-          <div className="h-full flex items-center justify-between px-6">
-            {/* Welcome Message */}
+        {/* Header - Fixed */}
+        <header className="sticky top-0 z-30 h-16 bg-white shadow-sm border-b border-gray-200">
+          <div className="h-full flex items-center justify-between px-4 md:px-6">
+            {/* Mobile Menu Button */}
+            <button
+              onClick={toggleMobileMenu}
+              className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200 md:hidden"
+            >
+              <Menu className="w-6 h-6 text-gray-600" />
+            </button>
+
+            {/* Welcome Message - Hidden on small screens, visible on medium+ */}
             <div className="hidden md:block">
               <h2 className="text-lg font-semibold text-gray-800">
                 {t("studentDashboard.welcome")}
@@ -92,8 +190,14 @@ const StudentDashboard = () => {
               <p className="text-sm text-gray-500">{t("studentDashboard.manage")}</p>
             </div>
 
+            {/* Mobile Logo - Visible only on small screens */}
+            <div className="flex items-center gap-2 md:hidden">
+              <img src={logo} alt="Excellence School" className="w-8 h-8" />
+              <h1 className="font-bold text-lg text-gray-800">Excellence</h1>
+            </div>
+
             {/* Header Actions */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 md:gap-4">
               {/* Notification Bell */}
               <button className="relative p-2 rounded-full hover:bg-gray-100 transition-colors duration-200">
                 <Bell className="w-5 h-5 text-gray-600" />
@@ -101,11 +205,11 @@ const StudentDashboard = () => {
               </button>
 
               {/* User Profile */}
-              <div className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors duration-200 cursor-pointer">
+              <div className="flex items-center gap-2 md:gap-3 px-2 md:px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors duration-200 cursor-pointer">
                 <div className="w-8 h-8 bg-gradient-to-r from-orange-400 to-yellow-400 rounded-full flex items-center justify-center">
                   <User className="w-4 h-4 text-white" />
                 </div>
-                <div className="text-right">
+                <div className="text-right hidden sm:block">
                   <p className="font-semibold text-gray-800 text-sm">
                     {auth.fullname || t("studentDashboard.unknown")}
                   </p>
@@ -118,9 +222,9 @@ const StudentDashboard = () => {
           </div>
         </header>
 
-        {/* Main Content Area */}
+        {/* Main Content Area - Scrollable */}
         <main className="flex-1 overflow-y-auto">
-          <div className="p-6">
+          <div className="p-4 md:p-6">
             <Outlet />
           </div>
         </main>

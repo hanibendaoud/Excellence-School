@@ -3,14 +3,31 @@ import { Users, BookOpen, FileText, LogOut, PlusCircle, MessageCircle } from "lu
 import { useTranslation } from "react-i18next";
 import useAuth from "../hooks/useAuth";
 import logo from '../assets/logo.svg';
-
+import { useState } from "react";
 const TeacherDashboard = () => {
   const { logout } = useAuth();
   const { t, i18n } = useTranslation();
 
-  const changeLanguage = (lang) => {
-    i18n.changeLanguage(lang);
-    localStorage.setItem("lang", lang);
+  const [lang, setLang] = useState(i18n.language || "en");
+    
+    const LANGUAGES = [
+    { code: "en", label: "EN" },
+    { code: "fr", label: "FR" },
+    { code: "ar", label: "AR" },
+  ];
+  const handleChangeLang = (code) => {
+    i18n.changeLanguage(code);
+    setLang(code);
+    localStorage.setItem("lang", code);
+
+    // For Arabic, switch to RTL
+    if (code === "ar") {
+      document.documentElement.dir = "rtl";
+      document.documentElement.lang = "ar";
+    } else {
+      document.documentElement.dir = "ltr";
+      document.documentElement.lang = code;
+    }
   };
 
   const navItems = [
@@ -79,15 +96,24 @@ const TeacherDashboard = () => {
             </div>
 
             {/* Language Selector */}
-            <select
-              onChange={(e) => changeLanguage(e.target.value)}
-              defaultValue={i18n.language}
-              className="p-2 border rounded"
+            <div className="flex items-center gap-3 border rounded-full px-3 py-1 select-none">
+          {LANGUAGES.map(({ code, label }) => (
+            <button
+              key={code}
+              onClick={() => handleChangeLang(code)}
+              className={`w-8 h-8 flex items-center justify-center rounded-full text-sm font-semibold transition
+                ${
+                  lang === code
+                    ? "bg-orange-500 text-white shadow-lg"
+                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                }`}
+              aria-label={`Switch language to ${label}`}
+              title={`Switch language to ${label}`}
             >
-              <option value="fr">Français</option>
-              <option value="en">English</option>
-              <option value="ar">العربية</option>
-            </select>
+              {label}
+            </button>
+          ))}
+        </div>
           </div>
         </header>
 
