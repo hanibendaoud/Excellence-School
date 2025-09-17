@@ -380,7 +380,52 @@
     "checkStatus": "Erreur lors de la vérification de l'état d'acceptation",
     "tryLater": "Erreur lors de la vérification de votre statut. Veuillez réessayer plus tard."
   }
-}
+},
+"home": {
+    "welcome": "Bienvenue à",
+    "schoolName": "Excellence School",
+    "intro": "Excellence School est un établissement privé dédié à l'apprentissage de haute qualité pour tous. En inspirant l'innovation, l'inclusion et l'excellence académique, nous permettons aux élèves d'atteindre leur plein potentiel et de se préparer à un avenir brillant.",
+    "register": "S'inscrire maintenant",
+    "about": "À propos de",
+    "aboutText": "Nous sommes une communauté d'apprentissage dynamique où l'éducation, la créativité et la diversité se rencontrent. Notre mission est d'inspirer les élèves à grandir, rêver et exceller à chaque étape de leur parcours.",
+    "videoDescription": "Découvrez la vie scolaire en action à travers cette vidéo.",
+    "features": {
+      "classrooms": {
+        "title": "Salles de classe",
+        "desc": "Des salles modernes qui encouragent l'innovation."
+      },
+      "reception": {
+        "title": "Réception",
+        "desc": "Un espace d'accueil chaleureux prêt à guider les visiteurs."
+      },
+      "location": {
+        "title": "Venez nous voir",
+        "desc": "Vous nous trouverez dans la wilaya de Mostaganem, précisément dans la commune de Massra.",
+        "link": "Ouvrir dans Google Maps →"
+      }
+    },
+    "activitiesTitle": "Découvrez nos activités",
+    "activities": {
+      "quran": "Séances de mémorisation du Coran",
+      "awards": "Cérémonie de remise des prix pour les bacheliers",
+      "trips": "Sorties éducatives et ludiques pour vos enfants",
+      "workshops": "Ateliers pour enseigner divers arts à vos enfants"
+    }
+  },
+  "nav": {
+    "home": "Accueil",
+    "about": "À propos",
+    "activities": "Activités",
+    "contact": "Contact"
+  },
+  "header": {
+    "login": "Connexion",
+    "signUp": "Inscription"
+  },
+  "homee": {
+    "welcome": "Bienvenue à",
+    "schoolName": "Excellence School"
+  }
 
 
 

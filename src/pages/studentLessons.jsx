@@ -1,6 +1,6 @@
 // src/pages/StudentLessons.jsx
 import { useEffect, useState } from "react";
-import { FileText, Youtube } from "lucide-react";
+import { FileText, Video } from "lucide-react";
 import useAuth from "../hooks/useAuth";
 import { useTranslation } from "react-i18next";
 
@@ -124,11 +124,12 @@ const StudentLessons = () => {
               key={l._id}
               className="flex items-center gap-3 bg-purple-200 p-3 rounded-lg"
             >
-              {l.type === "video" ? (
-                <Youtube className="w-5 h-5 text-red-500" />
-              ) : (
-                <FileText className="w-5 h-5 text-blue-600" />
-              )}
+              {l.type === "Video" ? (
+  <Video className="w-5 h-5 text-red-500" />
+) : (
+  <FileText className="w-5 h-5 text-blue-600" />
+)}
+
               <a
                 href={l.url}
                 target="_blank"

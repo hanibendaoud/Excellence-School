@@ -380,8 +380,51 @@
     "checkStatus": "Error checking acceptance status",
     "tryLater": "Error checking your status. Please try again later."
   }
-}
+},
 
 
-
+ "home": {
+    "welcome": "Welcome to",
+    "schoolName": "Excellence School",
+    "intro": "Excellence School is a private educational institution dedicated to providing high-quality learning for all. Inspiring innovation, inclusivity, and academic excellence, we empower students to achieve their fullest potential and prepare them for a bright future.",
+    "register": "Register Now",
+    "about": "About",
+    "aboutText": "We are a vibrant learning community where education, creativity, and diversity come together. Our mission is to inspire students to grow, dream, and achieve excellence in every step of their journey.",
+    "videoDescription": "Discover school life in action through this video.",
+    "features": {
+      "classrooms": {
+        "title": "Classrooms",
+        "desc": "Modern classrooms that encourage innovation."
+      },
+      "reception": {
+        "title": "Reception",
+        "desc": "A welcoming reception area ready to guide visitors."},
+      "location": {
+        "title": "Visit Us",
+        "desc": "You will find us in the state of Mostaganem, precisely in the municipality of Massra.",
+        "link": "Open in Google Maps →"
+      }
+    },
+    "activitiesTitle": "Discover Our Activities",
+    "activities": {
+      "quran": "Qur'an memorization sessions",
+      "awards": "Honoring students who passed the baccalaureate",
+      "trips": "Group trips to entertain your children",
+      "workshops": "Workshops to teach your children various arts"
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "activities": "Activities",
+    "contact": "Contact"
+  },
+  "header": {
+    "login": "Login",
+    "signUp": "Sign Up"
+  },
+  "homee": {
+    "welcome": "Welcome to",
+    "schoolName": "Excellence School"
+  }
 }

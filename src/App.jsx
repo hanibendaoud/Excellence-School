@@ -29,6 +29,7 @@ import ResetPasswordTeacher from "./pages/resetTeacherPassword";
 
 import RequireAuth from "./components/RequireAuth";
 import Unauthorized from "./components/unauthorized";
+import LastPage from "./pages/lastPage"
 import useAuth from "./hooks/useAuth";
 
 // Admin Route Wrapper Component
@@ -69,6 +70,7 @@ function App() {
       <Route path="/resetPassword" element={<ResetPassword />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
       <Route path="/resetPasswordTeacher" element={<ResetPasswordTeacher />} />
+      <Route path="/i" element={<LastPage />} />
 
       {/* Student waiting route - students who haven't been accepted yet */}
       <Route element={<RequireAuth allowedRoles={['student']} />}>
