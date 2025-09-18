@@ -78,16 +78,16 @@ function App() {
       </Route>
 
       {/* Student Dashboard - requires acceptance */}
-{/*       <Route element={<RequireAuth allowedRoles={['student']} requireAcceptance={true} />}>
- */}        <Route path="/student" element={<StudentDashboard />}>
+      <Route element={<RequireAuth allowedRoles={['student']} requireAcceptance={true} />}>
+        <Route path="/student" element={<StudentDashboard />}>
           <Route index element={<Navigate to="home" />} />
           <Route path="home" element={<StudentHome />} />
           <Route path="timetable" element={<StudentTimetable />} />
           <Route path="lessons" element={<StudentLessons />} />
           <Route path="discussion" element={<StudentDiscussion />} />
         </Route>
-{/*       </Route>
- */}
+      </Route>
+
       {/* Admin Dashboard - Using Direct Auth Check */}
       <Route path="/admin" element={
         <AdminRouteWrapper>
