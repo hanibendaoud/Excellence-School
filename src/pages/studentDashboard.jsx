@@ -110,6 +110,7 @@ const StudentDashboard = () => {
   // Close notification panel when clicking outside
   const notifPanelRef = useRef(null);
   useEffect(() => {
+    handleClearNotifications();
     const handleClickOutside = (event) => {
       if (notifPanelRef.current && !notifPanelRef.current.contains(event.target)) {
         setNotifPanelOpen(false);
