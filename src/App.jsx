@@ -4,7 +4,7 @@ import Login from "./pages/login";
 import ResetPassword from "./pages/resetPassword";
 import { Routes, Route, Navigate } from "react-router-dom";
 
-
+import StudentProfile from "./pages/studentProfile";
 import StudentDashboard from "./pages/studentDashboard";
 import StudentHome from "./pages/studentHome";
 import StudentTimetable from "./pages/studentTimeTable";
@@ -85,6 +85,7 @@ function App() {
           <Route path="timetable" element={<StudentTimetable />} />
           <Route path="lessons" element={<StudentLessons />} />
           <Route path="discussion" element={<StudentDiscussion />} />
+          <Route path="profile" element={<StudentProfile />} />
         </Route>
       </Route>
 

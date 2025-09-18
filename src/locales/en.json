@@ -281,7 +281,8 @@
       "timetable": "Timetable",
       "lessons": "Lessons",
       "discussion": "Discussion"
-    }
+    },
+    "setting":"profile"
   },
   "studentDiscussion": {
     "teachers": "Teachers",
@@ -430,5 +431,32 @@
   "studentDashboardd": {
     "notifications": "Notifications",
     "noNotifications": "No notifications"
+  },
+  "studentProfile": {
+    "firstname": "First Name",
+    "firstnamePlaceholder": "Enter your first name",
+    "lastname": "Last Name",
+    "lastnamePlaceholder": "Enter your last name",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "phonenumber": "Phone Number",
+    "phonenumberPlaceholder": "Enter your phone number",
+    "academiclevel": "Academic Level",
+    "selectLevel": "Select a level",
+    "levelPrimary": "Primary",
+    "levelMiddle": "Middle",
+    "levelHigh": "High",
+    "levelUniversity": "University",
+
+    "required": "This field is required",
+    "invalidEmail": "Please enter a valid email address",
+    "invalidPhone": "Please enter a valid phone number",
+
+    "reset": "Reset",
+    "save": "Save",
+    "saving": "Saving...",
+
+    "updateSuccess": "Profile updated successfully",
+    "updateError": "An error occurred while updating the profile"
   }
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Outlet, NavLink } from "react-router-dom";
+import { Outlet, NavLink ,useNavigate } from "react-router-dom";
 import { Bell, User, LogOut, Home, Calendar, BookOpen, MessageCircle, Menu, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import useAuth from "../hooks/useAuth";
@@ -13,6 +13,7 @@ const LANGUAGES = [
 ];
 
 const StudentDashboard = () => {
+  const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const { logout, auth } = useAuth(); // assumes auth has user id, token, fullname, level, etc.
 
@@ -297,12 +298,12 @@ const StudentDashboard = () => {
 
               {/* User Profile / Logout */}
               <button
-                onClick={logout}
+                onClick={()=>navigate("/profile")}
                 className="flex items-center gap-1 text-gray-600 hover:text-gray-800 transition"
                 aria-label="Logout"
               >
                 <User className="w-5 h-5" />
-                <span className="hidden md:inline text-sm">{t("studentDashboard.logout")}</span>
+                <span className="hidden md:inline text-sm">{t("studentDashboard.setting")}</span>
               </button>
             </div>
           </div>

@@ -280,7 +280,8 @@
       "timetable": "الجدول الزمني",
       "lessons": "الدروس",
       "discussion": "النقاش"
-    }
+    },
+    "setting":"حساب"
   },
   "studentDiscussion": {
     "teachers": "الأساتذة",
@@ -432,8 +433,35 @@
     "welcome": "مرحبا بكم في",
     "schoolName": "مدرسة التميز"
   },
-  "studentDashboard": {
+  "studentDashboardd": {
     "notifications": "الإشعارات",
     "noNotifications": "لا توجد إشعارات"
+  },
+  "studentProfile": {
+    "firstname": "الاسم الأول",
+    "firstnamePlaceholder": "أدخل اسمك الأول",
+    "lastname": "الاسم الأخير",
+    "lastnamePlaceholder": "أدخل اسمك الأخير",
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "أدخل بريدك الإلكتروني",
+    "phonenumber": "رقم الهاتف",
+    "phonenumberPlaceholder": "أدخل رقم هاتفك",
+    "academiclevel": "المستوى الدراسي",
+    "selectLevel": "اختر المستوى",
+    "levelPrimary": "ابتدائي",
+    "levelMiddle": "متوسط",
+    "levelHigh": "ثانوي",
+    "levelUniversity": "جامعة",
+
+    "required": "هذا الحقل مطلوب",
+    "invalidEmail": "يرجى إدخال بريد إلكتروني صالح",
+    "invalidPhone": "يرجى إدخال رقم هاتف صالح",
+
+    "reset": "إعادة تعيين",
+    "save": "حفظ",
+    "saving": "جاري الحفظ...",
+
+    "updateSuccess": "تم تحديث الملف الشخصي بنجاح",
+    "updateError": "حدث خطأ أثناء تحديث الملف الشخصي"
   }
 }

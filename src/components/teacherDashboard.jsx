@@ -114,7 +114,6 @@ const TeacherDashboard = () => {
         </nav>
 
         <div className="px-4 py-4 border-t border-gray-100 flex flex-col gap-3">
-          <LanguageSelector />
           <button
             onClick={logout}
             className="group flex items-center gap-3 px-4 py-3 rounded-xl w-full text-left text-sm text-gray-600 hover:bg-red-50 hover:text-red-600 transition-all duration-200"
@@ -167,7 +166,6 @@ const TeacherDashboard = () => {
         </nav>
 
         <div className="px-4 py-4 border-t border-gray-100 flex flex-col gap-3">
-          <LanguageSelector />
           <button
             onClick={() => {
               logout();

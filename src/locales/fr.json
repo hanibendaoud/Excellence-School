@@ -281,7 +281,8 @@
       "timetable": "Emploi du temps",
       "lessons": "Cours",
       "discussion": "Discussion"
-    }
+    },
+    "setting":"profile"
   },
   "studentDiscussion": {
     "teachers": "Professeurs",
@@ -429,6 +430,33 @@
    "studentDashboardd": {
     "notifications": "Notifications",
     "noNotifications": "Aucune notification"
+  },
+  "studentProfile": {
+    "firstname": "Prénom",
+    "firstnamePlaceholder": "Entrez votre prénom",
+    "lastname": "Nom",
+    "lastnamePlaceholder": "Entrez votre nom",
+    "email": "Email",
+    "emailPlaceholder": "Entrez votre email",
+    "phonenumber": "Numéro de téléphone",
+    "phonenumberPlaceholder": "Entrez votre numéro de téléphone",
+    "academiclevel": "Niveau scolaire",
+    "selectLevel": "Sélectionnez un niveau",
+    "levelPrimary": "Primaire",
+    "levelMiddle": "Collège",
+    "levelHigh": "Lycée",
+    "levelUniversity": "Université",
+
+    "required": "Ce champ est obligatoire",
+    "invalidEmail": "Veuillez entrer une adresse email valide",
+    "invalidPhone": "Veuillez entrer un numéro de téléphone valide",
+
+    "reset": "Réinitialiser",
+    "save": "Enregistrer",
+    "saving": "Enregistrement...",
+
+    "updateSuccess": "Profil mis à jour avec succès",
+    "updateError": "Une erreur est survenue lors de la mise à jour du profil"
   }
 
 
