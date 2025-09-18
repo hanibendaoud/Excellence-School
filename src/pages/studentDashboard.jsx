@@ -298,7 +298,7 @@ const StudentDashboard = () => {
 
               {/* User Profile / Logout */}
               <button
-                onClick={()=>navigate("/profile")}
+                onClick={()=>navigate("/student/profile")}
                 className="flex items-center gap-1 text-gray-600 hover:text-gray-800 transition"
                 aria-label="Logout"
               >
