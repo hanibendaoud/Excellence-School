@@ -58,12 +58,12 @@ export default function Footer(props) {
             <li className="flex items-center gap-2">
               <Mail className="w-5 h-5 text-white" />
               <a href="mailto:edufund2025@gmail.com" className="hover:underline">
-                edufund2025@gmail.com
+                excellenceschool27@gmail.com
               </a>
             </li>
             <li className="flex items-center gap-2">
               <Phone className="w-5 h-5 text-white" />
-              <span>0658758479</span>
+              <span>0657297566 /  0776112565</span>
             </li>
           </ul>
         </div>

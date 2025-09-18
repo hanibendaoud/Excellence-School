@@ -1,4 +1,4 @@
-import { useEffect, useState,useContext } from "react";
+import { useState,useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEnvelope, FaLock, FaPhone } from "react-icons/fa";
 import wave from "../assets/wave.svg";
@@ -172,7 +172,7 @@ export default function Register() {
 
   // ===================== JSX =====================
   return (
-    <div className="h-screen flex items-center justify-center p-6 relative overflow-hidden">
+    <div className="min-h-screen overflow-y-auto flex items-center justify-center p-6 relative">
       {/* Background */}
       <img
         src={wave}
