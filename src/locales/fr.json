@@ -425,6 +425,10 @@
   "homee": {
     "welcome": "Bienvenue à",
     "schoolName": "Excellence School"
+  },
+   "studentDashboardd": {
+    "notifications": "Notifications",
+    "noNotifications": "Aucune notification"
   }
 
 
