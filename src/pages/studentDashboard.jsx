@@ -42,6 +42,29 @@ const StudentDashboard = () => {
     }
   };
 
+  const handleClearNotifications = async () => {
+  try {
+    const storedId = localStorage.getItem("id") || auth?._id || auth?.id;
+    if (!storedId) return;
+
+    const resp = await fetch("https://excellenceschool.onrender.com/deletenotifications", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ _id: storedId }),
+    });
+
+    if (!resp.ok) {
+      console.error("Failed to delete notifications:", resp.status, await resp.text());
+      return;
+    }
+
+    setNotifications([]);
+    setUnreadCount(0);
+  } catch (err) {
+    console.error("Error deleting notifications:", err);
+  }
+};
+
   const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
@@ -274,26 +297,34 @@ const StudentDashboard = () => {
                 </button>
 
                 {notifPanelOpen && (
-                  <div className="absolute right-0 mt-2 w-80 max-h-96 overflow-y-auto bg-white shadow-lg rounded-md border border-gray-200 z-50">
-                    <div className="px-4 py-2 border-b border-gray-100 font-semibold text-gray-700">
-                      {t("studentDashboardd.notifications")}
-                    </div>
-                    {notifications.length === 0 ? (
-                      <div className="px-4 py-3 text-gray-500 text-sm">
-                        {t("studentDashboardd.noNotifications")}
-                      </div>
-                    ) : (
-                      notifications.map((notif, index) => (
-                        <div
-                          key={index}
-                          className="px-4 py-2 border-b last:border-b-0 hover:bg-gray-50 cursor-pointer text-gray-700 text-sm"
-                        >
-                          {notif}
-                        </div>
-                      ))
-                    )}
-                  </div>
-                )}
+  <div className="absolute right-0 mt-2 w-80 max-h-96 overflow-y-auto bg-white shadow-lg rounded-md border border-gray-200 z-50">
+    <div className="px-4 py-2 border-b border-gray-100 font-semibold text-gray-700 flex items-center justify-between">
+      <span>{t("studentDashboardd.notifications")}</span>
+      <button
+        onClick={handleClearNotifications}
+        className="text-gray-400 hover:text-red-500"
+        aria-label="Clear notifications"
+      >
+        <X className="w-4 h-4" />
+      </button>
+    </div>
+
+    {notifications.length === 0 ? (
+      <div className="px-4 py-3 text-gray-500 text-sm">
+        {t("studentDashboardd.noNotifications")}
+      </div>
+    ) : (
+      notifications.map((notif, index) => (
+        <div
+          key={index}
+          className="px-4 py-2 border-b last:border-b-0 hover:bg-gray-50 cursor-pointer text-gray-700 text-sm"
+        >
+          {notif}
+        </div>
+      ))
+    )}
+  </div>
+)}
               </div>
 
               {/* User Profile / Logout */}
