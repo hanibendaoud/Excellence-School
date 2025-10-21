@@ -71,7 +71,8 @@ const TeacherLogin = () => {
 
       // Map backend role to frontend role
       let userRole = data.msg;
-      if (data.msg === "management") {
+
+      if (data.msg === "managemrnt") {
         userRole = "admin"; // Convert backend 'management' to 'admin'
       } else if (data.msg === "teacher") {
         userRole = "teacher";
